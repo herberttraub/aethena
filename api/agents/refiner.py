@@ -157,6 +157,11 @@ def store_feedback(
     reason: str,
 ) -> None:
     with psycopg.connect(settings.DATABASE_URL.replace("+psycopg", "")) as conn, conn.cursor() as cur:
+        if team_id:
+            cur.execute(
+                "insert into teams (id, name) values (%s, %s) on conflict (id) do nothing",
+                (team_id, "Lab"),
+            )
         cur.execute(
             """
             insert into feedback

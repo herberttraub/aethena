@@ -147,6 +147,11 @@ def plan(body: PlanRequest) -> dict:
     plan_id = str(uuid.uuid4())
     try:
         with _conn() as conn, conn.cursor() as cur:
+            if body.team_id:
+                cur.execute(
+                    "insert into teams (id, name) values (%s, %s) on conflict (id) do nothing",
+                    (body.team_id, "Lab"),
+                )
             cur.execute(
                 "insert into queries (id, team_id, question, experiment_type, domain) values (%s, %s, %s, %s, %s)",
                 (query_id, body.team_id, body.question, out["experiment_type"], out["domain"]),
