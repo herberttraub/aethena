@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LogOut, User as UserIcon } from "lucide-react";
 import {
@@ -9,16 +9,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { auth } from "@/lib/auth";
+import { auth, type AuthUser } from "@/lib/auth";
 import logo from "@/assets/aethena-logo.png";
 
-/** Subscribe components to auth state via useSyncExternalStore. */
-function useAuth() {
-  return useSyncExternalStore(
-    (cb) => auth.onChange(cb),
-    () => auth.current(),
-    () => null,
-  );
+/** Subscribe to auth state changes. We can't use useSyncExternalStore here
+ * because `auth.current()` deserializes a fresh object from localStorage on
+ * every call — React compares snapshots by reference, infers an infinite
+ * change loop, and throws Maximum update depth. Plain useState +
+ * subscription is the right pattern when the snapshot isn't stable. */
+function useAuth(): AuthUser | null {
+  const [user, setUser] = useState<AuthUser | null>(() => auth.current());
+  useEffect(() => auth.onChange((u) => setUser(u)), []);
+  return user;
 }
 
 export function SiteHeader() {
