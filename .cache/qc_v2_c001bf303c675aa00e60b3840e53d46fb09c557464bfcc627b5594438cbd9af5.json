@@ -1,0 +1,33 @@
+{
+  "status": "no_indexed_knowledge",
+  "novelty_score": 0.5,
+  "rationale": "Top retrieval below threshold (0.55 < 0.72). We do not have indexed literature on this question.",
+  "references": [
+    {
+      "title": "A binary ionogel electrolyte for the realization of an all solid-state electrical double-layer capacitor performing at low temperature.",
+      "authors": "Emmanuel Pamet\u00e9, Zhuanpei Wang, Fran\u00e7ois B\u00e9guin",
+      "year": 2024,
+      "source": "semantic_scholar",
+      "source_id": "10.1002/cssc.202400596",
+      "url": "",
+      "similarity": 0.5473909019167061,
+      "snippet": "A binary ionogel electrolyte for the realization of an all solid-state electrical double-layer capacitor performing at low temperature.\n\nSolid-state electrolytes made of an ionic liquid (IL) confined in a solid matrix, also known as ionogels, have been proposed to prevent electrolyte leakage from el"
+    },
+    {
+      "title": "Effect of Dual Porous Layers with Patterned Wettability on Low-Temperature Start Performance of Polymer Electrolyte Membrane Fuel Cell",
+      "authors": "Guozhuo Wang, Y. Utaka, Shixue Wang",
+      "year": 2020,
+      "source": "semantic_scholar",
+      "source_id": "10.3390/en13143529",
+      "url": "",
+      "similarity": 0.5426695807542449,
+      "snippet": "Effect of Dual Porous Layers with Patterned Wettability on Low-Temperature Start Performance of Polymer Electrolyte Membrane Fuel Cell\n\nThe low-temperature start problem of polymer electrolyte membrane fuel cells (PEMFCs) is a factor limiting their large-scale application. To improve the low-tempera"
+    }
+  ],
+  "needs_user_choice": true,
+  "fallback_options": [
+    "provide_source",
+    "broad_general_search"
+  ],
+  "is_ungrounded": false
+}

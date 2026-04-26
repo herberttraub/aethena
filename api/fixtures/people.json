@@ -1,0 +1,17 @@
+[
+  {"name": "Dr. Kira Tang", "institution": "MIT — Dept. of Biological Engineering", "title": "Associate Professor", "expertise": ["antibody functionalization", "biosensors", "diagnostic devices"], "email": "ktang@mit.edu"},
+  {"name": "Dr. Rajiv Patel", "institution": "Harvard — Wyss Institute", "title": "Senior Research Scientist", "expertise": ["paper-based microfluidics", "point-of-care diagnostics"], "email": "rpatel@wyss.harvard.edu"},
+  {"name": "Dr. Helena Brouwer", "institution": "MIT — Koch Institute", "title": "Principal Investigator", "expertise": ["electrochemical sensing", "amperometric immunoassays"], "email": "hbrouwer@mit.edu"},
+  {"name": "Dr. Marco Aceto", "institution": "Harvard Medical School — Microbiology", "title": "Assistant Professor", "expertise": ["gut microbiome", "Lactobacillus", "tight junction biology"], "email": "maceto@hms.harvard.edu"},
+  {"name": "Dr. Ngozi Achebe", "institution": "MIT — Whitehead Institute", "title": "Group Leader", "expertise": ["mouse models", "intestinal permeability assays", "FITC-dextran"], "email": "nachebe@wi.mit.edu"},
+  {"name": "Dr. Yelena Park", "institution": "Harvard — Dana-Farber", "title": "Postdoctoral Fellow", "expertise": ["claudin/occludin biology", "epithelial barrier function"], "email": "ypark@dfci.harvard.edu"},
+  {"name": "Dr. Stefan Lindqvist", "institution": "MIT — Department of Biology", "title": "Associate Professor", "expertise": ["cryopreservation", "membrane biophysics"], "email": "slindq@mit.edu"},
+  {"name": "Dr. Aiyana Standing-Bear", "institution": "Harvard — School of Public Health", "title": "Research Scientist", "expertise": ["HeLa cell handling", "cell viability assays"], "email": "astanding@hsph.harvard.edu"},
+  {"name": "Dr. Tomás Esquivel", "institution": "MIT — Department of Chemistry", "title": "Senior Lecturer", "expertise": ["trehalose chemistry", "saccharide cryoprotectants"], "email": "tesquivel@mit.edu"},
+  {"name": "Dr. Priya Chandrasekharan", "institution": "MIT — Civil & Environmental Eng.", "title": "Associate Professor", "expertise": ["bioelectrochemistry", "microbial electrosynthesis", "carbon capture"], "email": "priyac@mit.edu"},
+  {"name": "Dr. Linus Bremer", "institution": "Harvard — School of Engineering", "title": "Assistant Professor", "expertise": ["acetogenic bacteria", "Sporomusa", "anaerobic fermentation"], "email": "lbremer@seas.harvard.edu"},
+  {"name": "Dr. Julia Frantz", "institution": "MIT.nano", "title": "Staff Scientist", "expertise": ["screen printing", "thin-film electrodes", "carbon-paste fabrication"], "email": "jfrantz@mit.edu"},
+  {"name": "Dr. Sam Okonkwo", "institution": "Harvard — Center for Brain Science", "title": "Associate Director", "expertise": ["cell culture", "DMSO protocols", "GMP-style preservation"], "email": "sokonkwo@cbs.harvard.edu"},
+  {"name": "Dr. Mei Zhao", "institution": "MIT — RLE", "title": "Research Affiliate", "expertise": ["potentiostat operation", "cyclic voltammetry"], "email": "meizhao@mit.edu"},
+  {"name": "Dr. Felipe Ortiz-Reyes", "institution": "Harvard — FAS Chemistry", "title": "Senior Postdoc", "expertise": ["antibody conjugation", "surface chemistry"], "email": "fortiz@chem.harvard.edu"}
+]

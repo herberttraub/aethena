@@ -1,0 +1,22 @@
+[
+  {"name": "Potentiostat", "model": "Autolab PGSTAT204", "location": "Building 16, Room 311 — Tang Lab, Massachusetts Institute of Technology", "owner_team": "Tang Lab"},
+  {"name": "Potentiostat", "model": "CH Instruments 760E", "location": "Wyss Institute, Lower Level Room 218, Harvard University", "owner_team": "Patel group"},
+  {"name": "Screen-printing station", "model": "DEK 248", "location": "MIT.nano Cleanroom, Bay 4, Building 12, Massachusetts Institute of Technology", "owner_team": "MIT.nano shared"},
+  {"name": "Centrifuge", "model": "Eppendorf 5430R", "location": "Building 56, Room 412 — Brouwer Lab, Massachusetts Institute of Technology", "owner_team": "Brouwer Lab"},
+  {"name": "Plate reader", "model": "BioTek Synergy H1", "location": "Koch Institute for Integrative Cancer Research, Room 76-353, Massachusetts Institute of Technology", "owner_team": "Koch shared"},
+  {"name": "Plate reader (fluorescence)", "model": "Tecan Spark 10M", "location": "New Research Building, Room 630, Harvard Medical School", "owner_team": "Aceto Lab"},
+  {"name": "Mouse housing rack", "model": "Tecniplast IVC", "location": "Department of Comparative Medicine, Building 68 Vivarium, Massachusetts Institute of Technology", "owner_team": "DCM shared"},
+  {"name": "Tissue homogenizer", "model": "OMNI Bead Ruptor 24", "location": "Building 68, Room 240 — Achebe Lab, Massachusetts Institute of Technology", "owner_team": "Achebe Lab"},
+  {"name": "qPCR thermocycler", "model": "Applied Biosystems QuantStudio 5", "location": "Whitehead Institute for Biomedical Research, 4th Floor Shared Lab, Massachusetts Institute of Technology", "owner_team": "Whitehead shared"},
+  {"name": "Anaerobic chamber", "model": "Coy Type B", "location": "Building E25, Room 306 — Chandrasekharan Lab, Massachusetts Institute of Technology", "owner_team": "Chandrasekharan Lab"},
+  {"name": "Bioreactor", "model": "Eppendorf BioFlo 320", "location": "Pierce Hall, Room 100, Harvard School of Engineering and Applied Sciences", "owner_team": "Bremer Lab"},
+  {"name": "Gas chromatograph", "model": "Agilent 7890B FID", "location": "Building 18, Room 015, Massachusetts Institute of Technology", "owner_team": "Chemistry shared"},
+  {"name": "HPLC", "model": "Agilent 1260 Infinity II", "location": "Koch Institute for Integrative Cancer Research, Room 76-461, Massachusetts Institute of Technology", "owner_team": "Koch shared"},
+  {"name": "Liquid nitrogen dewar", "model": "MVE 1500", "location": "Building 68 Cold Room, Massachusetts Institute of Technology", "owner_team": "Lindqvist Lab"},
+  {"name": "Controlled-rate freezer", "model": "Planer Kryo 560-16", "location": "Building 1, Room 904, Harvard School of Public Health", "owner_team": "Standing-Bear group"},
+  {"name": "Inverted microscope", "model": "Nikon Eclipse Ti2", "location": "Building 16, Room 336, Massachusetts Institute of Technology", "owner_team": "MIT shared"},
+  {"name": "Flow cytometer", "model": "BD LSRFortessa", "location": "Koch Institute Flow Cytometry Core, Massachusetts Institute of Technology", "owner_team": "Koch Flow Core"},
+  {"name": "Spectrophotometer", "model": "Thermo NanoDrop One", "location": "Building 56, Room 410, Massachusetts Institute of Technology", "owner_team": "Brouwer Lab"},
+  {"name": "Fume hood", "model": "Labconco Protector XL", "location": "Building 18, Room 091, Massachusetts Institute of Technology", "owner_team": "Esquivel Lab"},
+  {"name": "Chemiluminescence imager", "model": "GE Amersham Imager 680", "location": "Building 68, Room 220, Massachusetts Institute of Technology", "owner_team": "Achebe Lab"}
+]

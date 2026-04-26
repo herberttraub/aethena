@@ -1,0 +1,40 @@
+{
+  "status": "similar_work_exists",
+  "novelty_score": 0.3,
+  "rationale": "Several references investigate the use of trehalose as a cryoprotectant for mammalian cells, including human cell lines, and compare it with or combine it with DMSO. Reference [0] studies sucrose and trehalose with DMSO in cryopreservation of HEP-G2 cells, a human tumor line, which is similar but not identical to HeLa cells. Reference [1] explores trehalose-mediated cryopreservation without DMSO in human cells, addressing intracellular delivery of trehalose. Reference [3] develops DMSO-free cryoprotectants including trehalose and sucrose for Jurkat cells, another human cell line. None of the references explicitly test replacing sucrose with trehalose alone as a cryoprotectant in HeLa cells or measure a 15 percentage point increase in post-thaw viability compared to 10% DMSO, nor do they specifically measure intracellular ice formation reduction as the mechanism. Thus, the exact experiment is not found, but closely related work on trehalose versus DMSO and sucrose exists.",
+  "references": [
+    {
+      "title": "Cryopreservation of HEP-G2 cells attached to substrates: the benefit of sucrose and trehalose in combination with dimethyl sulfoxide.",
+      "authors": "B. Myagmarjav, B. Liu",
+      "year": 2022,
+      "source": "semantic_scholar",
+      "source_id": "10.54680/fr22310110412",
+      "url": "",
+      "similarity": 0.8067966480091513,
+      "snippet": "Cryopreservation of HEP-G2 cells attached to substrates: the benefit of sucrose and trehalose in combination with dimethyl sulfoxide.\n\nBACKGROUND\nCryopreservation of mammalian cells is mainly done in cryovials as free cell suspension in 5 to10% (v/v) dimethyl sulfoxide (DMSO). Relatively little atte"
+    },
+    {
+      "title": "Amphipathic polymer-mediated uptake of trehalose for dimethyl sulfoxide-free human cell cryopreservation\u2606\u2606\u2606",
+      "authors": "D. Sharp, A. Picken, T. Morris, C. Hewitt, K. Coopman, N. Slater",
+      "year": 2013,
+      "source": "semantic_scholar",
+      "source_id": "10.1016/j.cryobiol.2013.09.002",
+      "url": "",
+      "similarity": 0.8034584950067362,
+      "snippet": "Amphipathic polymer-mediated uptake of trehalose for dimethyl sulfoxide-free human cell cryopreservation\u2606\u2606\u2606\n\nFor stem cell therapy to become a routine reality, one of the major challenges to overcome is their storage and transportation. Currently this is achieved by cryopreserving cells utilising th"
+    },
+    {
+      "title": "Me\n 2\n SO-free multicomponent cryoprotectants for efficient cryopreservation of Jurkat cells",
+      "authors": "Zixuan Zhang, Qiang Xu, Xinli Zhou",
+      "year": 2026,
+      "source": "semantic_scholar",
+      "source_id": "10.54680/fr26310110412",
+      "url": "",
+      "similarity": 0.7813731115043081,
+      "snippet": "Me\n 2\n SO-free multicomponent cryoprotectants for efficient cryopreservation of Jurkat cells\n\nBACKGROUND:\n Jurkat cells, a human T lymphocyte line widely used in immunological studies, require reliable cryostorage to maintain post-thaw quality. Dimethyl sulfoxide (Me\n 2\n SO) is the standard cryoprot"
+    }
+  ],
+  "needs_user_choice": false,
+  "fallback_options": [],
+  "is_ungrounded": false
+}

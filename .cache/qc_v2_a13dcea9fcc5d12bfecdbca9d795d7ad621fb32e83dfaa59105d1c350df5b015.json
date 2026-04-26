@@ -1,0 +1,33 @@
+{
+  "status": "no_indexed_knowledge",
+  "novelty_score": 0.5,
+  "rationale": "Top retrieval below threshold (0.49 < 0.72). We do not have indexed literature on this question.",
+  "references": [
+    {
+      "title": "The magnetic beads-based sandwich-shaped immune complexes for rapid and sensitive amperometric detection of SOX2 protein",
+      "authors": "G\u00f6ksu \u00d6Z\u00c7EL\u0130KAY AKYILDIZ, Mehmet Altay \u00dcnal, Se\u00e7il G\u00fclden, S. A. \u00d6zkan",
+      "year": 2024,
+      "source": "semantic_scholar",
+      "source_id": "10.55730/1300-0527.3712",
+      "url": "",
+      "similarity": 0.4934061775454899,
+      "snippet": "The magnetic beads-based sandwich-shaped immune complexes for rapid and sensitive amperometric detection of SOX2 protein\n\nSex-Determining Region Y-box 2 (SOX2) is a transcription factor protein. SOX2 expression is related to lymph node metastasis and distant metastasis in colorectal carcinomas. SOX2"
+    },
+    {
+      "title": "Construction of a Core-Satellite Immunoassay with Homogeneous Magnet-Assisted Ratiometric Fluorescence for Highly Sensitive and Visual Detection of Inflammatory Factors.",
+      "authors": "Binbin Wang, Yuning Zhang, Jie Li, Yanbing Lv, Li Wang, Yangchao Shi",
+      "year": 2025,
+      "source": "semantic_scholar",
+      "source_id": "10.1021/acs.analchem.5c04601",
+      "url": "",
+      "similarity": 0.4930786936744268,
+      "snippet": "Construction of a Core-Satellite Immunoassay with Homogeneous Magnet-Assisted Ratiometric Fluorescence for Highly Sensitive and Visual Detection of Inflammatory Factors.\n\nThe development of in vitro diagnostics (IVD) has been characterized by a focus on efficiency and convenience in a variety of tes"
+    }
+  ],
+  "needs_user_choice": true,
+  "fallback_options": [
+    "provide_source",
+    "broad_general_search"
+  ],
+  "is_ungrounded": false
+}

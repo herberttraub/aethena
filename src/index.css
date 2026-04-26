@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* aethena — mineral / petri-dish design system
+   Brass + sage + slate-blue + clay on warm mineral cream paper.
+   Notebook texture, handwritten accents, consistent fonts everywhere.
+   All colors HSL.
+*/
+
+@layer base {
+  :root {
+    /* Surfaces — sparkling white lab paper */
+    --background: 0 0% 100%;              /* pure sparkling white */
+    --foreground: 220 13% 14%;            /* charcoal ink */
+
+    --card: 0 0% 100%;                    /* pure white card */
+    --card-foreground: 220 13% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 14%;
+
+    /* Brand — ocean (green-blue) replaces all mustard/brass */
+    --primary: 192 75% 38%;               /* ocean teal */
+    --primary-foreground: 0 0% 100%;      /* white on ocean */
+    --primary-deep: 210 65% 22%;          /* deep navy */
+    --primary-soft: 192 70% 94%;          /* pale ocean tint */
+
+    /* Secondary — cool whites */
+    --secondary: 200 30% 96%;
+    --secondary-foreground: 210 40% 22%;
+
+    --muted: 200 25% 97%;
+    --muted-foreground: 210 12% 42%;
+
+    --accent: 178 45% 92%;                /* seafoam chip */
+    --accent-foreground: 192 60% 22%;
+
+    --destructive: 6 65% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Status colors — ocean palette */
+    --status-novel: 168 65% 38%;          /* sea-green = novel */
+    --status-novel-soft: 168 60% 93%;
+    --status-novel-deep: 178 70% 18%;     /* deep teal label box */
+    --status-similar: 212 75% 45%;        /* ocean blue = similar */
+    --status-similar-soft: 212 75% 94%;
+    --status-exact: 195 70% 38%;          /* deeper teal = exact match */
+    --status-exact-soft: 195 70% 94%;
+
+    /* Specialty ocean / petri-dish hues for accents */
+    --moss: 168 50% 28%;                  /* deep sea-green */
+    --brass-deep: 210 65% 28%;            /* deep navy (alias kept) */
+    --slate-blue: 212 55% 35%;            /* deep slate ocean */
+    --clay: 188 60% 38%;                  /* mineral teal (replaces clay) */
+    --charcoal: 210 25% 18%;              /* navy charcoal */
+    --mineral-teal: 188 70% 32%;          /* petri teal */
+    --mineral-violet: 200 50% 38%;        /* deep ocean (replaces violet) */
+    --mineral-amber: 178 60% 42%;         /* seafoam (replaces amber) */
+
+    /* Tinted card washes — very transparent navy/ocean fills */
+    --tint-ocean: 192 75% 38%;            /* base hue for ocean wash */
+    --tint-navy: 210 65% 22%;             /* base hue for navy wash */
+    --tint-seafoam: 168 65% 38%;          /* base hue for seafoam wash */
+
+    --border: 200 35% 86%;                /* soft ocean hairline */
+    --input: 200 30% 82%;
+    --ring: 192 75% 38%;                  /* ocean focus ring */
+
+    --radius: 0.5rem;
+
+    /* Typography */
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+    --font-hand: "Caveat", "Bradley Hand", cursive;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+    --sidebar-background: 42 35% 92%;
+    --sidebar-foreground: 90 6% 17%;
+    --sidebar-primary: 42 53% 54%;
+    --sidebar-primary-foreground: 42 50% 12%;
+    --sidebar-accent: 144 14% 85%;
+    --sidebar-accent-foreground: 144 22% 22%;
+    --sidebar-border: 42 18% 78%;
+    --sidebar-ring: 42 53% 54%;
+  }
+
+  .dark {
+    --background: 90 8% 10%;
+    --foreground: 42 30% 92%;
+    --card: 90 8% 13%;
+    --card-foreground: 42 30% 92%;
+    --popover: 90 8% 13%;
+    --popover-foreground: 42 30% 92%;
+    --primary: 42 60% 60%;
+    --primary-foreground: 90 10% 10%;
+    --primary-deep: 38 55% 45%;
+    --primary-soft: 42 25% 22%;
+    --secondary: 90 8% 18%;
+    --secondary-foreground: 42 30% 92%;
+    --muted: 90 8% 18%;
+    --muted-foreground: 42 10% 70%;
+    --accent: 90 8% 18%;
+    --accent-foreground: 42 30% 92%;
+    --destructive: 18 50% 45%;
+    --destructive-foreground: 42 30% 92%;
+    --border: 90 8% 22%;
+    --input: 90 8% 22%;
+    --ring: 42 60% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+  }
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+  .font-hand {
+    font-family: var(--font-hand);
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+@layer components {
+  .lab-card {
+    @apply rounded-lg border border-border;
+    background:
+      linear-gradient(180deg, hsl(var(--tint-ocean) / 0.04), hsl(var(--tint-navy) / 0.025)),
+      hsl(var(--card));
+    box-shadow: 0 1px 0 hsl(var(--tint-navy) / 0.06), 0 1px 2px hsl(var(--tint-navy) / 0.04);
+  }
+  .lab-card-ocean {
+    @apply rounded-lg border;
+    border-color: hsl(var(--tint-ocean) / 0.25);
+    background: linear-gradient(180deg, hsl(var(--tint-ocean) / 0.08), hsl(var(--tint-ocean) / 0.03));
+  }
+  .lab-card-navy {
+    @apply rounded-lg border;
+    border-color: hsl(var(--tint-navy) / 0.22);
+    background: linear-gradient(180deg, hsl(var(--tint-navy) / 0.07), hsl(var(--tint-navy) / 0.025));
+  }
+  .lab-card-seafoam {
+    @apply rounded-lg border;
+    border-color: hsl(var(--tint-seafoam) / 0.25);
+    background: linear-gradient(180deg, hsl(var(--tint-seafoam) / 0.08), hsl(var(--tint-seafoam) / 0.03));
+  }
+  .lab-rule {
+    @apply h-px w-full bg-border;
+  }
+  /* notebook ruled line for headings */
+  .notebook-rule {
+    background-image: linear-gradient(to right, hsl(var(--border)) 0, hsl(var(--border)) 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    background-position: 0 100%;
+  }
+  .badge-novel {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium;
+    background: hsl(var(--status-novel-soft));
+    color: hsl(var(--status-novel));
+  }
+  .badge-similar {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium;
+    background: hsl(var(--status-similar-soft));
+    color: hsl(var(--status-similar));
+  }
+  .badge-exact {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium;
+    background: hsl(var(--status-exact-soft));
+    color: hsl(var(--status-exact));
+  }
+  .equipment-highlight {
+    animation: equipment-pulse 2s ease-out;
+  }
+}
+
+@keyframes equipment-pulse {
+  0% {
+    box-shadow: 0 0 0 0 hsl(192 75% 38% / 0.55), 0 0 0 0 hsl(192 75% 38% / 0.25);
+    background-color: hsl(192 75% 38% / 0.10);
+  }
+  60% {
+    box-shadow: 0 0 0 8px hsl(192 75% 38% / 0), 0 0 0 14px hsl(192 75% 38% / 0);
+    background-color: hsl(192 75% 38% / 0.06);
+  }
+  100% {
+    box-shadow: 0 0 0 0 hsl(192 75% 38% / 0), 0 0 0 0 hsl(192 75% 38% / 0);
+    background-color: transparent;
+  }
+}

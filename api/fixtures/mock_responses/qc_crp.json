@@ -1,0 +1,40 @@
+{
+  "status": "similar_work_exists",
+  "novelty_score": 0.75,
+  "rationale": "Existing literature describes paper-based immunosensors for hs-CRP, but these are often colorimetric or require sample preprocessing. Electrochemical methods for CRP detection are also documented but are not typically presented as paper-based platforms for direct whole blood analysis without preprocessing. The proposed combination of a paper-based electrochemical biosensor for direct, preprocessing-free whole blood detection of hs-CRP at the specified sensitivity is a novel integration.",
+  "references": [
+    {
+      "title": "A colorimetric paper-based immunosensor for high-sensitivity C-reactive protein (hs-CRP) detection.",
+      "authors": "Duangtip Lawanstien, Pakakan Ngernpradab, M. Srisa-Art",
+      "year": 2026,
+      "source": "semantic_scholar",
+      "source_id": "10.1039/d5ay01911g",
+      "url": "",
+      "similarity": 0.82,
+      "snippet": "A simple colorimetric immunosensor using a paper-based analytical device (PAD) and a sandwich immunoassay was developed for the detection of high-sensitivity C-reactive protein."
+    },
+    {
+      "title": "Detection of C-Reactive Protein by Electrochemiluminescence-Based Droplet-Free Digital Immunoassay with Tyramide Signal Amplification",
+      "authors": "Hiroya Abe, S. Nakamura, Kentaro Ito, K. Ino, Zhengyi Liu, Shinichi Sato",
+      "year": 2025,
+      "source": "semantic_scholar",
+      "source_id": "10.1002/celc.202500024",
+      "url": "",
+      "similarity": 0.79,
+      "snippet": "C-reactive protein (CRP) is a widely used biomarker for monitoring inflammatory processes and assessing disease progression."
+    },
+    {
+      "title": "Eu-Chelate Polystyrene Microsphere-Based Lateral Flow Immunoassay Platform for hs-CRP Detection",
+      "authors": "Birui Jin, Zhiguo Du, Chuyao Zhang, Zhao Yu, Xuemin Wang, Jie Hu",
+      "year": 2022,
+      "source": "semantic_scholar",
+      "source_id": "10.3390/bios12110977",
+      "url": "",
+      "similarity": 0.77,
+      "snippet": "Inflammation caused by viral or bacterial infection is a major threat to human health globally."
+    }
+  ],
+  "needs_user_choice": false,
+  "fallback_options": [],
+  "is_ungrounded": false
+}

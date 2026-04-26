@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: hacknation-pg
+    environment:
+      POSTGRES_USER: scientist
+      POSTGRES_PASSWORD: scientist
+      POSTGRES_DB: scientist
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./api/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scientist"]
+      interval: 3s
+      timeout: 3s
+      retries: 10

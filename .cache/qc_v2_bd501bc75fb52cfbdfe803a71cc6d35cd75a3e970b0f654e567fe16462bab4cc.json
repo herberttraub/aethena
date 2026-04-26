@@ -1,0 +1,20 @@
+{
+  "status": "exact_match_found",
+  "novelty_score": 0.0,
+  "rationale": "Reference [0] explicitly investigates the effect of dual porous layers with patterned wettability on the low-temperature start performance of polymer electrolyte membrane fuel cells, which is exactly the hypothesis under consideration.",
+  "references": [
+    {
+      "title": "Effect of Dual Porous Layers with Patterned Wettability on Low-Temperature Start Performance of Polymer Electrolyte Membrane Fuel Cell",
+      "authors": "Guozhuo Wang, Y. Utaka, Shixue Wang",
+      "year": 2020,
+      "source": "semantic_scholar",
+      "source_id": "10.3390/en13143529",
+      "url": "",
+      "similarity": 0.9334274578568281,
+      "snippet": "Effect of Dual Porous Layers with Patterned Wettability on Low-Temperature Start Performance of Polymer Electrolyte Membrane Fuel Cell\n\nThe low-temperature start problem of polymer electrolyte membrane fuel cells (PEMFCs) is a factor limiting their large-scale application. To improve the low-tempera"
+    }
+  ],
+  "needs_user_choice": false,
+  "fallback_options": [],
+  "is_ungrounded": false
+}

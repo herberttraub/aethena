@@ -1,0 +1,811 @@
+{
+  "experiment_type": "paper.electrochemical.crp.blood",
+  "domain": "diagnostics_crp_biosensor",
+  "plan": {
+    "title": "Paper-Based Electrochemical Biosensor for High-Sensitivity C-Reactive Protein Detection in Whole Blood",
+    "budget": {
+      "currency": "USD",
+      "total_usd": 4136.0,
+      "categories": [
+        {
+          "name": "consumables",
+          "total_usd": 2160.0
+        },
+        {
+          "name": "equipment",
+          "total_usd": 0.0
+        },
+        {
+          "name": "labor",
+          "total_usd": 1600.0
+        },
+        {
+          "name": "contingency",
+          "total_usd": 376.0
+        },
+        {
+          "name": "other",
+          "total_usd": 0.0
+        }
+      ],
+      "line_items": [
+        {
+          "qty": 1.0,
+          "name": "Whatman Grade 1 Filter Paper",
+          "storage": "Room temperature, dry",
+          "supplier": "Cytiva (formerly GE Healthcare)",
+          "unit_size": "100 sheets, 110 mm diameter",
+          "catalog_no": "1001-110",
+          "supplier_url": "https://www.cytiva.com/en/us/products/lab-filtration/filter-papers/qualitative-filter-papers/whatman-grade-1-filter-paper-1001110",
+          "unit_cost_usd": 50.0,
+          "lead_time_days": 5,
+          "order_priority": "early",
+          "total_cost_usd": 50.0,
+          "shelf_life_days": 1825
+        },
+        {
+          "qty": 1.0,
+          "name": "Wax printer ink",
+          "storage": "Room temperature",
+          "supplier": "HP",
+          "unit_size": "1 cartridge",
+          "catalog_no": "C9380A",
+          "supplier_url": "https://www.hp.com/us-en/shop/pdp/hp-color-inkjet-print-cartridge-c9380a",
+          "unit_cost_usd": 40.0,
+          "lead_time_days": 3,
+          "order_priority": "early",
+          "total_cost_usd": 40.0,
+          "shelf_life_days": 730
+        },
+        {
+          "qty": 1.0,
+          "name": "Carbon ink",
+          "storage": "4°C, dark",
+          "supplier": "DuPont",
+          "unit_size": "100 g",
+          "catalog_no": "C2000802D3",
+          "supplier_url": "https://www.dupont.com/products/dupont-c2000802d3.html",
+          "unit_cost_usd": 250.0,
+          "lead_time_days": 10,
+          "order_priority": "early",
+          "total_cost_usd": 250.0,
+          "shelf_life_days": 180
+        },
+        {
+          "qty": 1.0,
+          "name": "Silver/Silver Chloride ink",
+          "storage": "4°C, dark",
+          "supplier": "DuPont",
+          "unit_size": "50 g",
+          "catalog_no": "C2000810P1",
+          "supplier_url": "https://www.dupont.com/products/dupont-c2000810p1.html",
+          "unit_cost_usd": 300.0,
+          "lead_time_days": 10,
+          "order_priority": "early",
+          "total_cost_usd": 300.0,
+          "shelf_life_days": 180
+        },
+        {
+          "qty": 1.0,
+          "name": "Anti-CRP capture antibody",
+          "storage": "-20°C",
+          "supplier": "R&D Systems (Bio-Techne)",
+          "unit_size": "100 µg",
+          "catalog_no": "MAB17071",
+          "supplier_url": "https://www.rndsystems.com/products/human-crp-antibody_mab17071",
+          "unit_cost_usd": 450.0,
+          "lead_time_days": 7,
+          "order_priority": "middle",
+          "total_cost_usd": 450.0,
+          "shelf_life_days": 365
+        },
+        {
+          "qty": 1.0,
+          "name": "N-(3-Dimethylaminopropyl)-N'-ethylcarbodiimide hydrochloride (EDC)",
+          "storage": "2-8°C, desiccated",
+          "supplier": "Sigma-Aldrich",
+          "unit_size": "1 g",
+          "catalog_no": "E7750",
+          "supplier_url": "https://www.sigmaaldrich.com/US/en/product/sigma/e7750",
+          "unit_cost_usd": 80.0,
+          "lead_time_days": 5,
+          "order_priority": "middle",
+          "total_cost_usd": 80.0,
+          "shelf_life_days": 365
+        },
+        {
+          "qty": 1.0,
+          "name": "N-Hydroxysuccinimide (NHS)",
+          "storage": "2-8°C, desiccated",
+          "supplier": "Sigma-Aldrich",
+          "unit_size": "5 g",
+          "catalog_no": "130672",
+          "supplier_url": "https://www.sigmaaldrich.com/US/en/product/aldrich/130672",
+          "unit_cost_usd": 70.0,
+          "lead_time_days": 5,
+          "order_priority": "middle",
+          "total_cost_usd": 70.0,
+          "shelf_life_days": 730
+        },
+        {
+          "qty": 1.0,
+          "name": "Phosphate Buffered Saline (PBS) pH 7.4",
+          "storage": "Room temperature",
+          "supplier": "Sigma-Aldrich",
+          "unit_size": "10 L",
+          "catalog_no": "P4417",
+          "supplier_url": "https://www.sigmaaldrich.com/US/en/product/sigma/p4417",
+          "unit_cost_usd": 60.0,
+          "lead_time_days": 3,
+          "order_priority": "early",
+          "total_cost_usd": 60.0,
+          "shelf_life_days": 1095
+        },
+        {
+          "qty": 1.0,
+          "name": "Bovine Serum Albumin (BSA)",
+          "storage": "2-8°C",
+          "supplier": "Sigma-Aldrich",
+          "unit_size": "50 g",
+          "catalog_no": "A7906",
+          "supplier_url": "https://www.sigmaaldrich.com/US/en/product/sigma/a7906",
+          "unit_cost_usd": 120.0,
+          "lead_time_days": 5,
+          "order_priority": "middle",
+          "total_cost_usd": 120.0,
+          "shelf_life_days": 1825
+        },
+        {
+          "qty": 10.0,
+          "name": "Whole blood samples (spiked with known CRP concentrations)",
+          "storage": "4°C",
+          "supplier": "In-house preparation",
+          "unit_size": "5 mL",
+          "catalog_no": "",
+          "supplier_url": "",
+          "unit_cost_usd": 0.0,
+          "lead_time_days": null,
+          "order_priority": "late",
+          "total_cost_usd": 0.0,
+          "shelf_life_days": 1
+        },
+        {
+          "qty": 1.0,
+          "name": "Human whole blood (control)",
+          "storage": "4°C",
+          "supplier": "Innovative Research",
+          "unit_size": "10 mL",
+          "catalog_no": "HWB-K2EDTA",
+          "supplier_url": "https://innovativeresearch.net/product/human-whole-blood-k2edta/",
+          "unit_cost_usd": 150.0,
+          "lead_time_days": 2,
+          "order_priority": "late",
+          "total_cost_usd": 150.0,
+          "shelf_life_days": 7
+        },
+        {
+          "qty": 1.0,
+          "name": "HRP-conjugated anti-CRP detection antibody",
+          "storage": "-20°C",
+          "supplier": "R&D Systems (Bio-Techne)",
+          "unit_size": "100 µg",
+          "catalog_no": "BAF1707",
+          "supplier_url": "https://www.rndsystems.com/products/human-crp-duoset-elisa_dy1707",
+          "unit_cost_usd": 500.0,
+          "lead_time_days": 7,
+          "order_priority": "middle",
+          "total_cost_usd": 500.0,
+          "shelf_life_days": 365
+        },
+        {
+          "qty": 1.0,
+          "name": "TMB/H2O2 substrate solution",
+          "storage": "2-8°C, dark",
+          "supplier": "Sigma-Aldrich",
+          "unit_size": "100 mL",
+          "catalog_no": "T0440",
+          "supplier_url": "https://www.sigmaaldrich.com/US/en/product/sigma/t0440",
+          "unit_cost_usd": 90.0,
+          "lead_time_days": 5,
+          "order_priority": "late",
+          "total_cost_usd": 90.0,
+          "shelf_life_days": 180
+        }
+      ],
+      "contingency_pct": 15.0
+    },
+    "protocol": [
+      {
+        "id": "S1",
+        "name": "Paper Substrate Preparation and Hydrophobic Patterning",
+        "notes": "Ensure wax is fully melted and absorbed into the paper to create robust hydrophobic barriers. Incomplete melting will lead to wicking issues.",
+        "qc_checks": [
+          "Visual inspection for uniform wax patterning",
+          "Water wicking test to confirm channel integrity"
+        ],
+        "rationale": "Whatman filter paper serves as the porous substrate for fluid transport and reagent immobilization. Hydrophobic patterning defines the reaction zones and channels, preventing sample dispersion and ensuring controlled flow for accurate assay performance.",
+        "assumed_skills": [
+          "Operating a wax printer",
+          "Basic laboratory safety"
+        ],
+        "equipment_used": [
+          "Wax printer",
+          "Oven"
+        ],
+        "materials_used": [
+          "Whatman Grade 1 Filter Paper",
+          "Wax printer ink"
+        ],
+        "duration_minutes": 60,
+        "can_run_parallel_with": []
+      },
+      {
+        "id": "S2",
+        "name": "Carbon Electrode Screen Printing",
+        "notes": "Proper curing of the carbon ink is critical for electrode conductivity and adhesion. Inadequate curing will result in high resistance and poor signal.",
+        "qc_checks": [
+          "Visual inspection for electrode uniformity and integrity",
+          "Resistance measurement of printed electrodes"
+        ],
+        "rationale": "Screen printing allows for precise deposition of conductive carbon ink onto the patterned paper, forming working, reference, and counter electrodes. This method is scalable and cost-effective for fabricating multiple sensors with consistent electrochemical properties.",
+        "assumed_skills": [
+          "Operating a screen-printing station",
+          "Handling conductive inks"
+        ],
+        "equipment_used": [
+          "Screen-printing station (DEK 248)",
+          "Oven"
+        ],
+        "materials_used": [
+          "Carbon ink",
+          "Silver/Silver Chloride ink"
+        ],
+        "duration_minutes": 90,
+        "can_run_parallel_with": []
+      },
+      {
+        "id": "S3",
+        "name": "Anti-CRP Antibody Immobilization",
+        "notes": "The concentration of EDC/NHS and antibody, as well as reaction time, are critical for optimal immobilization density. Excessive EDC/NHS can denature antibodies.",
+        "qc_checks": [
+          "Bradford assay on supernatant to confirm antibody depletion (indirect immobilization check)",
+          "Initial electrochemical impedance spectroscopy (EIS) on a subset of electrodes"
+        ],
+        "rationale": "Covalent immobilization of anti-CRP capture antibodies onto the carbon working electrode surface ensures stable attachment and proper orientation for efficient CRP binding. EDC/NHS chemistry forms stable amide bonds between carboxyl groups on the electrode (if pre-treated) or linker and amine groups on the antibody.",
+        "assumed_skills": [
+          "Precise pipetting techniques",
+          "Antibody handling and storage"
+        ],
+        "equipment_used": [
+          "Fume hood (Labconco Protector XL)",
+          "Micropipettes"
+        ],
+        "materials_used": [
+          "Anti-CRP capture antibody",
+          "N-(3-Dimethylaminopropyl)-N'-ethylcarbodiimide hydrochloride (EDC)",
+          "N-Hydroxysuccinimide (NHS)",
+          "Phosphate Buffered Saline (PBS) pH 7.4"
+        ],
+        "duration_minutes": 180,
+        "can_run_parallel_with": []
+      },
+      {
+        "id": "S4",
+        "name": "Blocking Non-Specific Binding Sites",
+        "notes": "Ensure complete coverage of the electrode surface with blocking solution. Incomplete blocking will result in high background noise.",
+        "qc_checks": [
+          "Visual inspection for uniform blocking solution coverage"
+        ],
+        "rationale": "Blocking the electrode surface with Bovine Serum Albumin (BSA) or a similar protein prevents non-specific adsorption of proteins from the blood sample, which would otherwise lead to high background signals and reduced assay specificity.",
+        "assumed_skills": [
+          "Precise pipetting techniques"
+        ],
+        "equipment_used": [
+          "Micropipettes"
+        ],
+        "materials_used": [
+          "Bovine Serum Albumin (BSA)",
+          "Phosphate Buffered Saline (PBS) pH 7.4"
+        ],
+        "duration_minutes": 60,
+        "can_run_parallel_with": []
+      },
+      {
+        "id": "S5",
+        "name": "Whole Blood Sample Application",
+        "notes": "The viscosity of whole blood can affect wicking speed. Ensure consistent sample volume application to maintain comparable flow rates across devices.",
+        "qc_checks": [
+          "Visual confirmation of sample wicking across the reaction zone"
+        ],
+        "rationale": "Application of the whole blood sample containing CRP allows the target analyte to bind specifically to the immobilized capture antibodies. The paper substrate facilitates capillary flow, drawing the sample across the reaction zone.",
+        "assumed_skills": [
+          "Handling biological samples (blood)",
+          "Precise pipetting techniques"
+        ],
+        "equipment_used": [
+          "Micropipettes"
+        ],
+        "materials_used": [
+          "Whole blood samples (spiked with known CRP concentrations)",
+          "Human whole blood (control)"
+        ],
+        "duration_minutes": 10,
+        "can_run_parallel_with": []
+      },
+      {
+        "id": "S6",
+        "name": "Enzyme-Conjugated Secondary Antibody Application",
+        "notes": "Adequate incubation time is necessary for efficient binding of the detection antibody. Insufficient incubation will lead to low signal.",
+        "qc_checks": [
+          "Visual confirmation of conjugate solution wicking"
+        ],
+        "rationale": "After CRP binding, an enzyme-conjugated secondary antibody (e.g., HRP-labeled anti-CRP) is applied. This forms a sandwich immunoassay complex, where the enzyme will later catalyze a reaction to generate an electrochemical signal proportional to the bound CRP.",
+        "assumed_skills": [
+          "Precise pipetting techniques",
+          "Antibody handling"
+        ],
+        "equipment_used": [
+          "Micropipettes"
+        ],
+        "materials_used": [
+          "HRP-conjugated anti-CRP detection antibody",
+          "Phosphate Buffered Saline (PBS) pH 7.4"
+        ],
+        "duration_minutes": 30,
+        "can_run_parallel_with": []
+      },
+      {
+        "id": "S7",
+        "name": "Electrochemical Substrate Application",
+        "notes": "The substrate solution should be freshly prepared or stored appropriately to maintain enzyme activity. Degraded substrate will result in poor signal generation.",
+        "qc_checks": [
+          "Visual observation of color change (if TMB is used)"
+        ],
+        "rationale": "The electrochemical substrate (e.g., TMB/H2O2 for HRP) is applied to the reaction zone. The enzyme (HRP) catalyzes the oxidation of TMB, generating a detectable electrochemical product, which is then measured by the potentiostat.",
+        "assumed_skills": [
+          "Precise pipetting techniques"
+        ],
+        "equipment_used": [
+          "Micropipettes"
+        ],
+        "materials_used": [
+          "TMB/H2O2 substrate solution"
+        ],
+        "duration_minutes": 5,
+        "can_run_parallel_with": []
+      },
+      {
+        "id": "S8",
+        "name": "Amperometric Measurement",
+        "notes": "Ensure proper electrical contact between the potentiostat and the paper electrodes. Poor contact will lead to noisy or erroneous readings. Maintain consistent timing between substrate addition and measurement.",
+        "qc_checks": [
+          "Baseline current stability before substrate addition",
+          "Reproducibility of current readings for replicate sensors"
+        ],
+        "rationale": "Amperometry measures the current generated by the electrochemical reaction at a fixed potential. The magnitude of this current is directly proportional to the concentration of the electroactive product, and thus to the amount of CRP in the sample.",
+        "assumed_skills": [
+          "Operating a potentiostat",
+          "Electrochemical data acquisition"
+        ],
+        "equipment_used": [
+          "Potentiostat (Autolab PGSTAT204)"
+        ],
+        "materials_used": [],
+        "duration_minutes": 10,
+        "can_run_parallel_with": []
+      },
+      {
+        "id": "S9",
+        "name": "Data Analysis and Calibration Curve Generation",
+        "notes": "Appropriate statistical methods should be used for curve fitting and LOD calculation. Outliers should be identified and justified for exclusion.",
+        "qc_checks": [
+          "R-squared value of calibration curve > 0.99",
+          "Consistency of replicate measurements"
+        ],
+        "rationale": "The measured amperometric currents are plotted against known CRP concentrations to generate a calibration curve. This curve is then used to determine the CRP concentration in unknown samples and to assess the sensor's sensitivity and limit of detection.",
+        "assumed_skills": [
+          "Statistical data analysis",
+          "Graphing and curve fitting"
+        ],
+        "equipment_used": [
+          "Computer with data analysis software"
+        ],
+        "materials_used": [],
+        "duration_minutes": 120,
+        "can_run_parallel_with": []
+      }
+    ],
+    "staffing": [
+      {
+        "role": "Principal Investigator",
+        "fte_pct": 5,
+        "institution": "MIT — Dept. of Biological Engineering",
+        "named_person": "Dr. Kira Tang",
+        "expertise_tags": [
+          "antibody functionalization",
+          "biosensors",
+          "diagnostic devices"
+        ]
+      },
+      {
+        "role": "Lead Scientist",
+        "fte_pct": 50,
+        "institution": "Harvard — Wyss Institute",
+        "named_person": "Dr. Rajiv Patel",
+        "expertise_tags": [
+          "paper-based microfluidics",
+          "point-of-care diagnostics"
+        ]
+      },
+      {
+        "role": "Electrochemical Specialist",
+        "fte_pct": 30,
+        "institution": "MIT — Koch Institute",
+        "named_person": "Dr. Helena Brouwer",
+        "expertise_tags": [
+          "electrochemical sensing",
+          "amperometric immunoassays"
+        ]
+      },
+      {
+        "role": "Fabrication Specialist",
+        "fte_pct": 20,
+        "institution": "MIT.nano",
+        "named_person": "Dr. Julia Frantz",
+        "expertise_tags": [
+          "screen printing",
+          "thin-film electrodes",
+          "carbon-paste fabrication"
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "name": "Phase 1: Sensor Fabrication & Functionalization",
+        "week_end": 2,
+        "week_start": 1,
+        "deliverables": [
+          "Patterned paper substrates",
+          "Screen-printed electrodes",
+          "Antibody-immobilized sensors"
+        ],
+        "dependencies": [],
+        "parallel_with": []
+      },
+      {
+        "name": "Phase 2: Assay Optimization & Calibration",
+        "week_end": 4,
+        "week_start": 3,
+        "deliverables": [
+          "Optimized blocking and incubation conditions",
+          "CRP calibration curve in buffer",
+          "Preliminary LOD/LOQ"
+        ],
+        "dependencies": [
+          "Phase 1: Sensor Fabrication & Functionalization"
+        ],
+        "parallel_with": []
+      },
+      {
+        "name": "Phase 3: Whole Blood Testing & Validation",
+        "week_end": 6,
+        "week_start": 5,
+        "deliverables": [
+          "CRP detection in spiked whole blood samples",
+          "Comparison with commercial ELISA data",
+          "Final LOD/LOQ in whole blood"
+        ],
+        "dependencies": [
+          "Phase 2: Assay Optimization & Calibration"
+        ],
+        "parallel_with": []
+      }
+    ],
+    "equipment": [
+      {
+        "name": "Wax printer",
+        "model": "Xerox ColorQube 8570",
+        "location": "MIT Bldg 16, Rm 311 — Tang Lab",
+        "owner_team": "Tang Lab"
+      },
+      {
+        "name": "Oven",
+        "model": "Thermo Scientific Precision",
+        "location": "MIT Bldg 16, Rm 311 — Tang Lab",
+        "owner_team": "Tang Lab"
+      },
+      {
+        "name": "Screen-printing station",
+        "model": "DEK 248",
+        "location": "MIT.nano cleanroom, bay 4",
+        "owner_team": "MIT.nano"
+      },
+      {
+        "name": "Fume hood",
+        "model": "Labconco Protector XL",
+        "location": "MIT Bldg 18-091",
+        "owner_team": "Department of Chemistry"
+      },
+      {
+        "name": "Micropipettes",
+        "model": "Eppendorf Research plus",
+        "location": "MIT Bldg 16, Rm 311 — Tang Lab",
+        "owner_team": "Tang Lab"
+      },
+      {
+        "name": "Potentiostat",
+        "model": "Autolab PGSTAT204",
+        "location": "MIT Bldg 16, Rm 311 — Tang Lab",
+        "owner_team": "Tang Lab"
+      },
+      {
+        "name": "Computer with data analysis software",
+        "model": "Dell OptiPlex",
+        "location": "MIT Bldg 16, Rm 311 — Tang Lab",
+        "owner_team": "Tang Lab"
+      }
+    ],
+    "materials": [
+      {
+        "qty": 1.0,
+        "name": "Whatman Grade 1 Filter Paper",
+        "storage": "Room temperature, dry",
+        "supplier": "Cytiva (formerly GE Healthcare)",
+        "unit_size": "100 sheets, 110 mm diameter",
+        "catalog_no": "1001-110",
+        "supplier_url": "https://www.cytiva.com/en/us/products/lab-filtration/filter-papers/qualitative-filter-papers/whatman-grade-1-filter-paper-1001110",
+        "unit_cost_usd": 50.0,
+        "lead_time_days": 5,
+        "order_priority": "early",
+        "total_cost_usd": 50.0,
+        "shelf_life_days": 1825
+      },
+      {
+        "qty": 1.0,
+        "name": "Wax printer ink",
+        "storage": "Room temperature",
+        "supplier": "HP",
+        "unit_size": "1 cartridge",
+        "catalog_no": "C9380A",
+        "supplier_url": "https://www.hp.com/us-en/shop/pdp/hp-color-inkjet-print-cartridge-c9380a",
+        "unit_cost_usd": 40.0,
+        "lead_time_days": 3,
+        "order_priority": "early",
+        "total_cost_usd": 40.0,
+        "shelf_life_days": 730
+      },
+      {
+        "qty": 1.0,
+        "name": "Carbon ink",
+        "storage": "4°C, dark",
+        "supplier": "DuPont",
+        "unit_size": "100 g",
+        "catalog_no": "C2000802D3",
+        "supplier_url": "https://www.dupont.com/products/dupont-c2000802d3.html",
+        "unit_cost_usd": 250.0,
+        "lead_time_days": 10,
+        "order_priority": "early",
+        "total_cost_usd": 250.0,
+        "shelf_life_days": 180
+      },
+      {
+        "qty": 1.0,
+        "name": "Silver/Silver Chloride ink",
+        "storage": "4°C, dark",
+        "supplier": "DuPont",
+        "unit_size": "50 g",
+        "catalog_no": "C2000810P1",
+        "supplier_url": "https://www.dupont.com/products/dupont-c2000810p1.html",
+        "unit_cost_usd": 300.0,
+        "lead_time_days": 10,
+        "order_priority": "early",
+        "total_cost_usd": 300.0,
+        "shelf_life_days": 180
+      },
+      {
+        "qty": 1.0,
+        "name": "Anti-CRP capture antibody",
+        "storage": "-20°C",
+        "supplier": "R&D Systems (Bio-Techne)",
+        "unit_size": "100 µg",
+        "catalog_no": "MAB17071",
+        "supplier_url": "https://www.rndsystems.com/products/human-crp-antibody_mab17071",
+        "unit_cost_usd": 450.0,
+        "lead_time_days": 7,
+        "order_priority": "middle",
+        "total_cost_usd": 450.0,
+        "shelf_life_days": 365
+      },
+      {
+        "qty": 1.0,
+        "name": "N-(3-Dimethylaminopropyl)-N'-ethylcarbodiimide hydrochloride (EDC)",
+        "storage": "2-8°C, desiccated",
+        "supplier": "Sigma-Aldrich",
+        "unit_size": "1 g",
+        "catalog_no": "E7750",
+        "supplier_url": "https://www.sigmaaldrich.com/US/en/product/sigma/e7750",
+        "unit_cost_usd": 80.0,
+        "lead_time_days": 5,
+        "order_priority": "middle",
+        "total_cost_usd": 80.0,
+        "shelf_life_days": 365
+      },
+      {
+        "qty": 1.0,
+        "name": "N-Hydroxysuccinimide (NHS)",
+        "storage": "2-8°C, desiccated",
+        "supplier": "Sigma-Aldrich",
+        "unit_size": "5 g",
+        "catalog_no": "130672",
+        "supplier_url": "https://www.sigmaaldrich.com/US/en/product/aldrich/130672",
+        "unit_cost_usd": 70.0,
+        "lead_time_days": 5,
+        "order_priority": "middle",
+        "total_cost_usd": 70.0,
+        "shelf_life_days": 730
+      },
+      {
+        "qty": 1.0,
+        "name": "Phosphate Buffered Saline (PBS) pH 7.4",
+        "storage": "Room temperature",
+        "supplier": "Sigma-Aldrich",
+        "unit_size": "10 L",
+        "catalog_no": "P4417",
+        "supplier_url": "https://www.sigmaaldrich.com/US/en/product/sigma/p4417",
+        "unit_cost_usd": 60.0,
+        "lead_time_days": 3,
+        "order_priority": "early",
+        "total_cost_usd": 60.0,
+        "shelf_life_days": 1095
+      },
+      {
+        "qty": 1.0,
+        "name": "Bovine Serum Albumin (BSA)",
+        "storage": "2-8°C",
+        "supplier": "Sigma-Aldrich",
+        "unit_size": "50 g",
+        "catalog_no": "A7906",
+        "supplier_url": "https://www.sigmaaldrich.com/US/en/product/sigma/a7906",
+        "unit_cost_usd": 120.0,
+        "lead_time_days": 5,
+        "order_priority": "middle",
+        "total_cost_usd": 120.0,
+        "shelf_life_days": 1825
+      },
+      {
+        "qty": 10.0,
+        "name": "Whole blood samples (spiked with known CRP concentrations)",
+        "storage": "4°C",
+        "supplier": "In-house preparation",
+        "unit_size": "5 mL",
+        "catalog_no": "",
+        "supplier_url": "",
+        "unit_cost_usd": 0.0,
+        "lead_time_days": null,
+        "order_priority": "late",
+        "total_cost_usd": 0.0,
+        "shelf_life_days": 1
+      },
+      {
+        "qty": 1.0,
+        "name": "Human whole blood (control)",
+        "storage": "4°C",
+        "supplier": "Innovative Research",
+        "unit_size": "10 mL",
+        "catalog_no": "HWB-K2EDTA",
+        "supplier_url": "https://innovativeresearch.net/product/human-whole-blood-k2edta/",
+        "unit_cost_usd": 150.0,
+        "lead_time_days": 2,
+        "order_priority": "late",
+        "total_cost_usd": 150.0,
+        "shelf_life_days": 7
+      },
+      {
+        "qty": 1.0,
+        "name": "HRP-conjugated anti-CRP detection antibody",
+        "storage": "-20°C",
+        "supplier": "R&D Systems (Bio-Techne)",
+        "unit_size": "100 µg",
+        "catalog_no": "BAF1707",
+        "supplier_url": "https://www.rndsystems.com/products/human-crp-duoset-elisa_dy1707",
+        "unit_cost_usd": 500.0,
+        "lead_time_days": 7,
+        "order_priority": "middle",
+        "total_cost_usd": 500.0,
+        "shelf_life_days": 365
+      },
+      {
+        "qty": 1.0,
+        "name": "TMB/H2O2 substrate solution",
+        "storage": "2-8°C, dark",
+        "supplier": "Sigma-Aldrich",
+        "unit_size": "100 mL",
+        "catalog_no": "T0440",
+        "supplier_url": "https://www.sigmaaldrich.com/US/en/product/sigma/t0440",
+        "unit_cost_usd": 90.0,
+        "lead_time_days": 5,
+        "order_priority": "late",
+        "total_cost_usd": 90.0,
+        "shelf_life_days": 180
+      }
+    ],
+    "hypothesis": "A paper-based electrochemical biosensor functionalized with anti-CRP antibodies will detect C-reactive protein in whole blood at concentrations below 0.5 mg/L within 10 minutes, matching laboratory ELISA sensitivity without requiring sample preprocessing.",
+    "references": [
+      {
+        "doi": "10.1039/d5ay01911g",
+        "url": "https://doi.org/10.1039/d5ay01911g",
+        "year": 2026,
+        "title": "A colorimetric paper-based immunosensor for high-sensitivity C-reactive protein (hs-CRP) detection.",
+        "authors": "Duangtip Lawanstien, Pakakan Ngernpradab, M. Srisa-Art",
+        "relevance": "Provides context on paper-based immunosensors for hs-CRP detection, relevant to the overall approach."
+      },
+      {
+        "doi": "10.1002/celc.202500024",
+        "url": "https://doi.org/10.1002/celc.202500024",
+        "year": 2025,
+        "title": "Detection of C‐Reactive Protein by Electrochemiluminescence‐Based Droplet‐Free Digital Immunoassay with Tyramide Signal Amplification",
+        "authors": "Hiroya Abe, S. Nakamura, Kentaro Ito, K. Ino, Zhengyi Liu, Shinichi Sato",
+        "relevance": "Highlights advanced electrochemical detection methods for CRP, informing the choice of electrochemical readout."
+      },
+      {
+        "doi": "10.3390/bios12110977",
+        "url": "https://doi.org/10.3390/bios12110977",
+        "year": 2022,
+        "title": "Eu-Chelate Polystyrene Microsphere-Based Lateral Flow Immunoassay Platform for hs-CRP Detection",
+        "authors": "Birui Jin, Zhiguo Du, Chuyao Zhang, Zhao Yu, Xuemin Wang, Jie Hu",
+        "relevance": "Discusses hs-CRP detection and the need for quantitative, rapid, and user-friendly methods, supporting the project's motivation."
+      },
+      {
+        "doi": "10.1016/J.PROENG.2011.12.232",
+        "url": "https://doi.org/10.1016/J.PROENG.2011.12.232",
+        "year": 2011,
+        "title": "Electrochemical ELISA Based on E. Coli with Autodisplayed Z-Domains",
+        "authors": "J. Jeong, K. Kim, S. Park",
+        "relevance": "Demonstrates the application of amperometric analysis to immunoassays, directly relevant to the electrochemical detection strategy."
+      },
+      {
+        "doi": "10.1021/acsomega.9b04159",
+        "url": "https://doi.org/10.1021/acsomega.9b04159",
+        "year": 2020,
+        "title": "Synthesis and Structural Optimization of Iridium(III) Solvent Complex for Electrochemiluminescence Labeling of Histidine-Rich Protein and Immunoassay Applications for CRP Detection",
+        "authors": "Yuyang Zhou, Yangming Ding, Yinhao Huang, Leilei Cai, Jiawei Xu, Xiao Ma",
+        "relevance": "Provides insights into electrochemical labeling and immunoassay applications for CRP, informing signal generation strategies."
+      }
+    ],
+    "scale_hint": "medium",
+    "validation": {
+      "failure_modes": [
+        "High background signal due to non-specific binding, obscuring low CRP concentrations.",
+        "Poor antibody immobilization efficiency, leading to reduced sensitivity.",
+        "Inconsistent wicking or fluidic control on the paper substrate.",
+        "Electrode degradation or poor conductivity, resulting in unstable electrochemical signals.",
+        "Matrix effects from whole blood interfering with antibody-antigen binding or electrochemical detection."
+      ],
+      "statistics_plan": "Calibration curves will be generated using a minimum of 5 CRP concentrations in triplicate, with linear regression analysis to determine R-squared values. Limit of detection (LOD) will be calculated as 3 times the standard deviation of the blank signal divided by the slope of the calibration curve. Limit of quantification (LOQ) will be 10 times the standard deviation of the blank signal divided by the slope. Inter- and intra-assay variability will be assessed using coefficient of variation (CV) from replicate measurements.",
+      "success_criteria": [
+        "The biosensor demonstrates a limit of detection (LOD) for CRP in whole blood below 0.5 mg/L.",
+        "The total assay time from sample application to result is 10 minutes or less.",
+        "The sensor exhibits a linear response range for CRP concentrations relevant to clinical diagnostics (e.g., 0.1 - 10 mg/L).",
+        "The sensor shows acceptable specificity, with minimal interference from other blood components.",
+        "Reproducibility of results across multiple sensors and batches is within 15% CV."
+      ]
+    },
+    "open_questions": [
+      "What is the optimal surface modification strategy for carbon electrodes to maximize antibody immobilization density and maintain activity?",
+      "What is the precise incubation time for the secondary antibody conjugate to achieve maximum signal-to-noise ratio within the 10-minute assay window?",
+      "What is the long-term stability of the functionalized paper sensors when stored under various conditions (e.g., desiccated, refrigerated)?",
+      "How do different anticoagulants in whole blood samples affect the assay performance and signal stability?"
+    ],
+    "novelty_summary": "Current methods for C-reactive protein (CRP) detection, such as ELISA and lateral flow immunoassays, often require laboratory settings, extensive sample preparation, or lack the sensitivity for high-sensitivity CRP (hs-CRP) detection crucial for cardiovascular risk assessment. This experiment proposes a novel paper-based electrochemical biosensor that integrates antibody functionalization and direct electrochemical detection in whole blood, aiming to achieve sub-0.5 mg/L sensitivity within 10 minutes, thereby enabling rapid, point-of-care diagnostics without the need for sample preprocessing.",
+    "budget_justification": "",
+    "environmental_conditions": {
+      "light": "ambient laboratory light",
+      "atmosphere": "ambient air",
+      "temp_max_C": 24.0,
+      "temp_min_C": 20.0,
+      "humidity_max_pct": 60.0,
+      "humidity_min_pct": 30.0,
+      "season_sensitivity": "minimal, provided temperature and humidity are controlled"
+    }
+  }
+}

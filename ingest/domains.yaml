@@ -1,0 +1,43 @@
+# Demo-domain corpus seed.
+# Each domain gets ~50 abstracts from S2 + a few protocol pages.
+# Queries are tuned to cluster around the four sample hypotheses Fulcrum gave.
+
+domains:
+  - slug: diagnostics_crp_biosensor
+    label: Diagnostics — CRP electrochemical biosensor
+    s2_queries:
+      - "C-reactive protein electrochemical biosensor whole blood"
+      - "paper-based immunosensor antibody point-of-care"
+      - "amperometric CRP detection immunoassay"
+    protocol_urls:
+      - https://bio-protocol.org/en/bpdetail?id=4036
+      - https://bio-protocol.org/en/bpdetail?id=2929
+
+  - slug: gut_health_probiotic
+    label: Gut health — probiotic mouse intestinal permeability
+    s2_queries:
+      - "Lactobacillus rhamnosus intestinal permeability tight junction"
+      - "FITC-dextran assay gut barrier mouse"
+      - "claudin-1 occludin probiotic intestinal epithelium"
+    protocol_urls:
+      - https://bio-protocol.org/en/bpdetail?id=2860
+      - https://bio-protocol.org/en/bpdetail?id=4204
+
+  - slug: cell_biology_cryo
+    label: Cell biology — trehalose cryoprotection HeLa
+    s2_queries:
+      - "trehalose cryoprotectant cell viability post-thaw"
+      - "HeLa cryopreservation DMSO alternative"
+      - "membrane stabilization low temperature mammalian cell freezing"
+    protocol_urls:
+      - https://bio-protocol.org/en/bpdetail?id=3290
+      - https://bio-protocol.org/en/bpdetail?id=2055
+
+  - slug: climate_co2_microbe
+    label: Climate — Sporomusa CO2 to acetate
+    s2_queries:
+      - "Sporomusa ovata bioelectrochemical CO2 acetate"
+      - "microbial electrosynthesis cathode CO2 reduction"
+      - "acetogenic bacteria carbon capture electrode"
+    protocol_urls:
+      - https://bio-protocol.org/en/bpdetail?id=3760
