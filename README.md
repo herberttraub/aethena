@@ -1,10 +1,8 @@
 # æthena — your self-learning AI co-scientist
 
-> From a one-line hypothesis to a runnable, lab-grade experiment plan — and a model that gets sharper for your team with every correction. No fine-tuning. No retraining infra. Just per-lab calibration that compounds with use.
+> From a one-line hypothesis to a runnable, lab-grade experiment plan — and a model that gets sharper for your team with every correction.
 
-æthena turns a sentence-long scientific hypothesis into a fundable plan: literature defense, numbered protocol with rationale, materials with verified supplier links, line-item budget, week-by-week timeline, staffing, QC checks, collaborators with one-click outreach drafts. Every accepted correction a scientist makes is folded into the next generation as a few-shot example, scoped strictly per-team. Three to five corrections in, the planner reflects your lab's terminology, depth, and budget instincts.
-
-Built for the Hacknation MIT × Fulcrum Science challenge.
+An AI co-scientist that transforms a one-line hypothesis into a lab-grade experimental plan, including protocols, materials, budget, timeline, and collaborator recommendations. The system improves with every team correction through a per-team few-shot feedback loop, allowing it to adapt to each lab’s standards without fine-tuning, retraining infrastructure, or added model operations overhead.
 
 ---
 
@@ -43,7 +41,7 @@ A scientist types a one-line hypothesis. æthena returns:
    - Staffing with named people and FTE percentages.
    - Validation plan with primary endpoint, statistics, decision criteria, and risks.
 3. **Collaborator matching** — extracts the specific protocols and assays in your plan, fans out parallel Semantic Scholar `author/search` calls, ranks by methodological overlap, and drafts a formal academic outreach email per match (one-click `mailto:` to your mail client).
-4. **Equipment sourcing** — equipment grouped by building (with multi-room handling) and embedded Google Maps so a scientist can plan one visit per location.
+4. **Equipment sourcing** — equipment grouped by building and embedded Google Maps so a scientist can plan one visit per location.
 5. **Multi-format export** — PDF (branded palette), DOCX, LaTeX, Markdown.
 6. **A profile view** — every correction the model has learned, with per-row delete (soft-delete via `accepted=false` so few-shot retrieval skips it but history is preserved).
 
@@ -441,7 +439,6 @@ The fastest path to seeing self-learning in action:
 - Five scientist interviews informed the planner prompt, the schema, and the design rules baked into the system prompt — thank you to the working scientists who shared what generic AI tools always get wrong.
 - The Lovable team for the initial UI scaffold; the design tokens and core component shape come from there.
 - Semantic Scholar for free, generous literature access.
-- The pgvector and FastAPI maintainers — the stack just works.
 
 ---
 
