@@ -3,7 +3,10 @@
   "packages": { "python": "3.13" },
   "steps": {
     "install": {
-      "commands": ["pip install -r api/requirements.txt"]
+      "commands": [
+        { "src": ".", "dest": "." },
+        "pip install -r api/requirements.txt"
+      ]
     }
   },
   "deploy": {
