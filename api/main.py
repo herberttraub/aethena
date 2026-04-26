@@ -43,6 +43,7 @@ _CORS_ORIGINS = [
     "http://localhost:3001",
     "http://localhost:5173",  # generic Vite default
     "http://127.0.0.1:5173",
+    "https://aethena.vercel.app",  # Vercel production deploy
 ]
 
 app.add_middleware(

@@ -1,6 +1,6 @@
 """ExperimentPlan -> Markdown -> {pdf, docx, tex, md}.
 
-PDF uses weasyprint (HTML->PDF, no LaTeX dependency).
+PDF uses xhtml2pdf (pure-Python HTML->PDF, no system deps required).
 DOCX and LaTeX use pandoc when available.
 Plain markdown is always available.
 """
@@ -156,7 +156,7 @@ def plan_to_markdown(plan: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-# ─── HTML for PDF (weasyprint) ────────────────────────────────────────────
+# ─── HTML for PDF (xhtml2pdf) ─────────────────────────────────────────────
 PDF_CSS = """
 @page { size: Letter; margin: 0.85in 0.9in 0.95in; @bottom-center { content: "aethena - page " counter(page) " of " counter(pages); font-family: Georgia, serif; font-size: 8pt; color: #6e6e6e; } }
 body { font-family: 'Fraunces', 'EB Garamond', 'Garamond', Georgia, serif; color: #1a2332; line-height: 1.55; font-size: 10.5pt; }
