@@ -43,8 +43,8 @@ def verify_password(password: str, hashed: str) -> bool:
 def issue_token(*, user_id: str, team_id: str, email: str) -> str:
     now = int(time.time())
     payload = {
-        "sub": user_id,
-        "team_id": team_id,
+        "sub": str(user_id),
+        "team_id": str(team_id),
         "email": email,
         "iat": now,
         "exp": now + settings.JWT_TTL_DAYS * 86400,
@@ -91,6 +91,20 @@ def ensure_users_table() -> None:
 
 
 # ─── Repository helpers ────────────────────────────────────────────────────
+def _row_to_user(row: tuple) -> dict[str, Any]:
+    """Materialize a users-table row into a JSON-serializable dict.
+    psycopg returns uuid columns as `uuid.UUID` objects, which both
+    `json.dumps` (FastAPI response) and `jwt.encode` (token payload)
+    refuse to serialize — so we cast id and team_id to str at the boundary."""
+    keys = ["id", "email", "password_hash", "name", "team_id", "role", "research_type", "institution", "onboarded"]
+    user = dict(zip(keys, row))
+    if user.get("id") is not None:
+        user["id"] = str(user["id"])
+    if user.get("team_id") is not None:
+        user["team_id"] = str(user["team_id"])
+    return user
+
+
 def find_user_by_email(email: str) -> dict[str, Any] | None:
     with _conn() as conn, conn.cursor() as cur:
         cur.execute(
@@ -99,10 +113,7 @@ def find_user_by_email(email: str) -> dict[str, Any] | None:
             (email.lower().strip(),),
         )
         row = cur.fetchone()
-        if not row:
-            return None
-        keys = ["id", "email", "password_hash", "name", "team_id", "role", "research_type", "institution", "onboarded"]
-        return dict(zip(keys, row))
+        return _row_to_user(row) if row else None
 
 
 def find_user_by_id(user_id: str) -> dict[str, Any] | None:
@@ -113,10 +124,7 @@ def find_user_by_id(user_id: str) -> dict[str, Any] | None:
             (user_id,),
         )
         row = cur.fetchone()
-        if not row:
-            return None
-        keys = ["id", "email", "password_hash", "name", "team_id", "role", "research_type", "institution", "onboarded"]
-        return dict(zip(keys, row))
+        return _row_to_user(row) if row else None
 
 
 def create_user(*, email: str, password: str, name: str | None) -> dict[str, Any]:
