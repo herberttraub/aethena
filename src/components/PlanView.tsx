@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import {
   AlertTriangle,
+  BookOpen,
   CalendarRange,
+  CheckCircle2,
   ChevronDown,
   ClipboardList,
   Coins,
@@ -11,6 +13,7 @@ import {
   FlaskConical,
   Microscope,
   Pencil,
+  RefreshCcw,
   Star,
   TestTubeDiagonal,
   Users,
@@ -25,7 +28,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import type { ExperimentPlan } from "@/lib/scientist-types";
+import type { ExperimentPlan, Reference } from "@/lib/scientist-types";
 import { formatTimelineWeeks, formatUSD, isMeaningfulSafetyNote, planToMarkdown } from "@/lib/scientist-utils";
 import { exportPdf, exportDocx, exportLatex } from "@/lib/scientist-exports";
 import { toast } from "sonner";
@@ -46,12 +49,13 @@ const SECTION_COLOR = "192 75% 38%";
 const SECTIONS = [
   { id: "overview",     label: "Overview",     icon: Microscope,        color: SECTION_COLOR },
   { id: "protocol",     label: "Protocol",     icon: ClipboardList,     color: SECTION_COLOR },
-  { id: "materials",    label: "Materials",    icon: TestTubeDiagonal,  color: SECTION_COLOR },
-  { id: "budget",       label: "Budget",       icon: Coins,             color: SECTION_COLOR },
   { id: "timeline",     label: "Timeline",     icon: CalendarRange,     color: SECTION_COLOR },
+  { id: "materials",    label: "Materials",    icon: TestTubeDiagonal,  color: SECTION_COLOR },
+  { id: "equipment",    label: "Equipment",    icon: Wrench,            color: SECTION_COLOR },
+  { id: "budget",       label: "Budget",       icon: Coins,             color: SECTION_COLOR },
   { id: "validation",   label: "Validation",   icon: FlaskConical,      color: SECTION_COLOR },
   { id: "collaborators",label: "Collaborators",icon: Users,             color: SECTION_COLOR },
-  { id: "equipment",    label: "Equipment",    icon: Wrench,            color: SECTION_COLOR },
+  { id: "references",   label: "References",   icon: BookOpen,          color: SECTION_COLOR },
 ] as const;
 
 const SECTION_COLORS: Record<string, string> = SECTIONS.reduce(
@@ -74,10 +78,13 @@ interface Props {
   hypothesis: string;
   planId: string;
   feedbackApplied: number;
+  references?: Reference[];
   onNew: () => void;
+  onRegenerate?: () => void;
+  regenerating?: boolean;
 }
 
-export function PlanView({ plan, hypothesis, planId, feedbackApplied, onNew }: Props) {
+export function PlanView({ plan, hypothesis, planId, feedbackApplied, references, onNew, onRegenerate, regenerating }: Props) {
   const [reviewMode, setReviewMode] = useState(false);
   const [openStepFeedback, setOpenStepFeedback] = useState<number | null>(null);
   const [author, setAuthor] = useState("");
@@ -210,6 +217,19 @@ export function PlanView({ plan, hypothesis, planId, feedbackApplied, onNew }: P
             </h1>
           </div>
           <div className="flex items-center gap-2">
+            {onRegenerate && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onRegenerate}
+                disabled={regenerating}
+                className="gap-1.5"
+                title="Re-run plan generation with the same hypothesis. Use this after submitting feedback to verify your corrections were applied."
+              >
+                <RefreshCcw className={`h-3.5 w-3.5 ${regenerating ? "animate-spin" : ""}`} />
+                {regenerating ? "Regenerating…" : "Regenerate"}
+              </Button>
+            )}
             <Button variant="outline" size="sm" onClick={copyLink} className="gap-1.5">
               <Copy className="h-3.5 w-3.5" /> Link
             </Button>
@@ -389,6 +409,40 @@ export function PlanView({ plan, hypothesis, planId, feedbackApplied, onNew }: P
                               {eq}
                             </button>
                           ))}
+                        </div>
+                      )}
+                      {s.assumed_skills && s.assumed_skills.length > 0 && (
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          <span className="uppercase tracking-wider">Assumes:</span>{" "}
+                          {s.assumed_skills.join(", ")}
+                        </p>
+                      )}
+                      {s.qc_checks && s.qc_checks.length > 0 && (
+                        <div
+                          className="mt-2 rounded-md border px-3 py-2"
+                          style={{
+                            background: "hsl(280 50% 45% / 0.08)",
+                            borderColor: "hsl(280 50% 45% / 0.40)",
+                          }}
+                        >
+                          <div
+                            className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.18em] font-semibold mb-1"
+                            style={{ color: "hsl(280 60% 38%)" }}
+                          >
+                            <CheckCircle2 className="h-3 w-3" />
+                            QC checks
+                          </div>
+                          <ul className="space-y-0.5">
+                            {s.qc_checks.map((q, qi) => (
+                              <li
+                                key={qi}
+                                className="text-xs leading-relaxed"
+                                style={{ color: "hsl(280 45% 28%)" }}
+                              >
+                                • {q}
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       )}
                       {isMeaningfulSafetyNote(s.safety_notes) && (
@@ -582,6 +636,61 @@ export function PlanView({ plan, hypothesis, planId, feedbackApplied, onNew }: P
           <Section id="equipment" title="Source equipment locally" icon={Wrench}>
             <EquipmentPanel plan={plan} />
             <InlineFeedback planId={planId} section="equipment" />
+          </Section>
+          )}
+
+          {/* References */}
+          {activeTab === "references" && (
+          <Section id="references" title="References" icon={BookOpen}>
+            <p className="text-xs text-muted-foreground mb-3">
+              Literature surfaced during the novelty check that informed this plan. Click any title to open the source.
+            </p>
+            {(!references || references.length === 0) ? (
+              <div className="lab-card p-6 text-sm text-muted-foreground">
+                No references were attached to this plan. Run a literature check first to ground your plan in published work.
+              </div>
+            ) : (
+              <ol className="space-y-3">
+                {references.map((r, i) => (
+                  <li key={i} className="lab-card p-4">
+                    <div className="flex items-start gap-3">
+                      <span className="shrink-0 grid place-items-center h-6 w-6 rounded-full bg-primary-soft text-primary-deep text-xs font-medium">
+                        {i + 1}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-medium text-foreground leading-snug">
+                          {r.url ? (
+                            <a
+                              href={r.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="hover:text-primary inline-flex items-baseline gap-1"
+                            >
+                              {r.title || "(untitled)"}
+                              <ExternalLink className="h-3 w-3 shrink-0 self-center" />
+                            </a>
+                          ) : (
+                            r.title || "(untitled)"
+                          )}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {r.authors && r.authors.length > 0 ? r.authors.slice(0, 4).join(", ") : "Authors unknown"}
+                          {r.authors && r.authors.length > 4 ? ", et al." : ""}
+                          {r.year ? ` · ${r.year}` : ""}
+                          {r.venue ? ` · ${r.venue}` : ""}
+                        </p>
+                        {r.abstract && (
+                          <p className="text-xs text-foreground/75 mt-2 leading-relaxed line-clamp-3">
+                            {r.abstract}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            )}
+            <InlineFeedback planId={planId} section="references" />
           </Section>
           )}
 

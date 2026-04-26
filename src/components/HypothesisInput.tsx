@@ -2,13 +2,14 @@ import { useMemo, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { UploadDropzone } from "./UploadDropzone";
 
 interface Props {
   onSubmit: (hypothesis: string, files: File[]) => void;
   loading: boolean;
   initialValue?: string;
 }
+
+const MIN_CHARS = 30;
 
 const SAMPLES = [
   {
@@ -27,9 +28,11 @@ const SAMPLES = [
 
 export function HypothesisInput({ onSubmit, loading, initialValue = "" }: Props) {
   const [value, setValue] = useState(initialValue);
-  const [files, setFiles] = useState<File[]>([]);
+  const files: File[] = [];
 
-  const ok = useMemo(() => value.trim().length >= 30, [value]);
+  const trimmedLen = value.trim().length;
+  const ok = useMemo(() => trimmedLen >= MIN_CHARS, [trimmedLen]);
+  const remaining = Math.max(0, MIN_CHARS - trimmedLen);
 
   return (
     <section className="mx-auto max-w-3xl px-6 pt-20 pb-16">
@@ -58,8 +61,16 @@ export function HypothesisInput({ onSubmit, loading, initialValue = "" }: Props)
           disabled={loading}
         />
         <div className="flex items-center justify-between border-t border-border px-3 py-2">
-          <span className="text-xs text-muted-foreground">
-            {value.trim().length} chars · aim for a specific intervention, measurable outcome, threshold, mechanism, control
+          <span className={`text-xs ${ok ? "text-muted-foreground" : "text-amber-700"}`}>
+            {ok ? (
+              <>
+                {trimmedLen} chars · aim for a specific intervention, measurable outcome, threshold, mechanism, control
+              </>
+            ) : (
+              <>
+                {trimmedLen}/{MIN_CHARS} characters · {remaining} more needed before we can run the literature check
+              </>
+            )}
           </span>
           <Button
             disabled={!ok || loading}
@@ -71,10 +82,6 @@ export function HypothesisInput({ onSubmit, loading, initialValue = "" }: Props)
             <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </div>
-      </div>
-
-      <div className="mt-4">
-        <UploadDropzone files={files} onChange={setFiles} disabled={loading} />
       </div>
 
       <div className="mt-10">

@@ -45,11 +45,6 @@ const Landing = () => {
               <Link to="/login">Login</Link>
             </Button>
           </div>
-          <p className="mt-3 text-xs text-muted-foreground">
-            <Link to="/app" className="hover:underline">
-              or try a plan first &rarr;
-            </Link>
-          </p>
         </section>
 
         {/* Three-up overview */}

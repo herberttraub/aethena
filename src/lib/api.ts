@@ -27,12 +27,18 @@ import type {
   TimelinePhase,
 } from "./scientist-types";
 
-const BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "http://localhost:8765";
+import { API_BASE as BASE } from "./api-base";
+import { auth } from "./auth";
+
+function authHeaders(): Record<string, string> {
+  const t = auth.token();
+  return t ? { Authorization: `Bearer ${t}` } : {};
+}
 
 async function jpost<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...authHeaders() },
     body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`${path} → ${res.status}: ${await res.text()}`);
@@ -40,18 +46,22 @@ async function jpost<T>(path: string, body: unknown): Promise<T> {
 }
 
 async function jget<T>(path: string): Promise<T> {
-  const res = await fetch(`${BASE}${path}`);
+  const res = await fetch(`${BASE}${path}`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`${path} → ${res.status}: ${await res.text()}`);
+  return res.json();
+}
+
+async function jdelete<T>(path: string): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, { method: "DELETE", headers: authHeaders() });
   if (!res.ok) throw new Error(`${path} → ${res.status}: ${await res.text()}`);
   return res.json();
 }
 
 async function jform<T>(path: string, fd: FormData): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, { method: "POST", body: fd });
+  const res = await fetch(`${BASE}${path}`, { method: "POST", body: fd, headers: authHeaders() });
   if (!res.ok) throw new Error(`${path} → ${res.status}: ${await res.text()}`);
   return res.json();
 }
-
-import { auth } from "./auth";
 
 // Default team — matches the backend seed in api/db/init.sql; used until the user logs in.
 const DEFAULT_TEAM_ID = "00000000-0000-0000-0000-000000000001";
@@ -212,13 +222,9 @@ function adaptQc(b: BQCResult): QcResult {
 }
 
 function adaptProtocolStep(s: BProtocolStep, idx: number): ProtocolStep {
-  // Repo B has rich rationale + notes + skills. We pack the essentials into
-  // Lovable's smaller shape: description gets the rationale + notes + qc checks
-  // glued together; safety_notes stays just for safety-flavoured content.
-  const description = [s.rationale, s.notes, s.qc_checks?.length ? `QC: ${s.qc_checks.join("; ")}` : ""]
-    .filter(Boolean)
-    .join("\n\n");
-  const safety = s.assumed_skills?.length ? `Assumed skills: ${s.assumed_skills.join(", ")}` : "";
+  // Keep rationale + notes as the prose body. assumed_skills and qc_checks
+  // surface as their own arrays so the UI can render them distinctly.
+  const description = [s.rationale, s.notes].filter(Boolean).join("\n\n");
   return {
     step: idx + 1,
     title: s.name,
@@ -226,7 +232,9 @@ function adaptProtocolStep(s: BProtocolStep, idx: number): ProtocolStep {
     duration: `${s.duration_minutes} min`,
     equipment: [...new Set(s.equipment_used || [])],
     materials: [...new Set(s.materials_used || [])],
-    safety_notes: safety,
+    assumed_skills: [...new Set(s.assumed_skills || [])],
+    qc_checks: [...new Set(s.qc_checks || [])],
+    safety_notes: "", // safety lives in plan-level safety field, not per-step
   };
 }
 
@@ -243,9 +251,19 @@ function adaptMaterial(m: BMaterial): Material {
     supplier: m.supplier || "",
     quantity: qty,
     unit_cost_usd: m.unit_cost_usd || 0,
-    link: m.supplier_url || undefined,
+    link: googleLuckyUrl(m),
     notes: noteParts.join(" · "),
   };
+}
+
+/** Build a Google "I'm Feeling Lucky" search URL so material links always
+ * resolve to a relevant page even when the LLM hallucinates a catalog URL.
+ * btnI=I bypasses the SERP and redirects to the top result. */
+function googleLuckyUrl(m: BMaterial): string {
+  const parts = [m.supplier, m.name, m.catalog_no].filter(Boolean);
+  const q = parts.join(" ").trim();
+  if (!q) return "";
+  return `https://www.google.com/search?q=${encodeURIComponent(q)}&btnI=I`;
 }
 
 function categoryFor(m: BMaterial): string {
@@ -518,6 +536,27 @@ export const api = {
   /** Export — returns a URL the UI can fetch / window.open */
   exportUrl: (planId: string, format: "pdf" | "docx" | "tex" | "md") =>
     `${BASE}/plan/${planId}/export?format=${format}`,
+
+  /** Profile preferences (the things the model has "learned" about this team). */
+  async listPreferences(): Promise<
+    {
+      id: string;
+      section: string;
+      before: string | null;
+      after: string | null;
+      freeform_note: string | null;
+      experiment_type: string | null;
+      domain: string | null;
+      created_at: string;
+    }[]
+  > {
+    const r = await jget<{ items: any[] }>("/me/preferences");
+    return r.items || [];
+  },
+
+  async deletePreference(id: string): Promise<void> {
+    await jdelete(`/me/preferences/${encodeURIComponent(id)}`);
+  },
 };
 
 export type { BExperimentPlan };

@@ -26,6 +26,10 @@ export interface ProtocolStep {
   equipment: string[];
   /** Materials referenced in this step — separate from equipment so each list links to its own tab. */
   materials?: string[];
+  /** Skills the planner assumed the operator already has. */
+  assumed_skills?: string[];
+  /** Quality-control checks that gate progression to the next step. */
+  qc_checks?: string[];
   safety_notes: string;
 }
 

@@ -204,10 +204,23 @@ function OutreachDialog({
   }
 
   function openMail() {
-    const params = new URLSearchParams();
-    if (subject) params.set("subject", subject);
-    if (body) params.set("body", body);
-    window.location.href = `mailto:?${params.toString()}`;
+    // mailto: requires %20 for spaces and %0A for newlines. URLSearchParams
+    // produces "+" for spaces which most mail clients render literally, and
+    // strips newlines. Build the query string by hand.
+    const to = (collaborator as any)?.email || "";
+    const params: string[] = [];
+    if (subject) params.push(`subject=${encodeURIComponent(subject)}`);
+    if (body) params.push(`body=${encodeURIComponent(body)}`);
+    const url = `mailto:${encodeURIComponent(to)}${params.length ? "?" + params.join("&") : ""}`;
+    // Anchor click is more reliable across browsers than location.href for
+    // protocol handlers that the browser must hand off to the OS.
+    const a = document.createElement("a");
+    a.href = url;
+    a.rel = "noreferrer";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   }
 
   return (
@@ -249,9 +262,13 @@ function OutreachDialog({
                 <Textarea
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
-                  rows={12}
-                  className="mt-1 font-serif text-[15px] leading-relaxed"
+                  rows={14}
+                  className="mt-1 font-serif text-[15px] leading-[1.7] whitespace-pre-wrap"
+                  style={{ whiteSpace: "pre-wrap" }}
                 />
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  Line breaks are preserved when you copy the draft or open it in your mail client.
+                </p>
               </div>
             </>
           )}

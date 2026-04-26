@@ -12,50 +12,38 @@ interface Props {
 const OPTIONS: {
   id: Depth;
   title: string;
-  eta: string;
   blurb: string;
   icon: any;
   iconBg: string;
   iconColor: string;
   hoverBorder: string;
-  etaBg: string;
-  etaColor: string;
 }[] = [
   {
     id: "light",
     title: "Light",
-    eta: "≈ 30 sec",
     blurb: "Concise headline plan. Best for early scoping and quick sanity checks.",
     icon: Feather,
     iconBg: "bg-mineral-teal/15",
     iconColor: "text-mineral-teal",
     hoverBorder: "hover:border-mineral-teal",
-    etaBg: "bg-mineral-teal/15",
-    etaColor: "text-mineral-teal",
   },
   {
     id: "regular",
     title: "Regular",
-    eta: "≈ 60 sec",
     blurb: "Balanced detail with rationale per step. The default for most cases.",
     icon: Microscope,
     iconBg: "bg-status-novel-soft",
     iconColor: "text-status-novel",
     hoverBorder: "hover:border-status-novel",
-    etaBg: "bg-status-novel-soft",
-    etaColor: "text-status-novel-deep",
   },
   {
     id: "deep",
     title: "Deep",
-    eta: "≈ 2 min",
     blurb: "Exhaustive: alternative protocols, failure modes, extended reasoning, citations per step.",
     icon: Telescope,
     iconBg: "bg-mineral-violet/15",
     iconColor: "text-mineral-violet",
     hoverBorder: "hover:border-mineral-violet",
-    etaBg: "bg-mineral-violet/15",
-    etaColor: "text-mineral-violet",
   },
 ];
 
@@ -77,12 +65,9 @@ export function DepthModal({ open, onOpenChange, onPick }: Props) {
               onClick={() => onPick(o.id)}
               className={`text-left lab-card p-4 ${o.hoverBorder} hover:shadow-md transition-all group`}
             >
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center mb-3">
                 <span className={`grid place-items-center h-9 w-9 rounded-md ${o.iconBg} ${o.iconColor}`}>
                   <o.icon className="h-4 w-4" />
-                </span>
-                <span className={`text-[11px] uppercase tracking-[0.14em] font-medium px-2 py-0.5 rounded-full ${o.etaBg} ${o.etaColor}`}>
-                  {o.eta}
                 </span>
               </div>
               <p className="font-serif text-xl text-foreground">{o.title}</p>

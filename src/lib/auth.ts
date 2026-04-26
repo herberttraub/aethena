@@ -1,63 +1,134 @@
 /**
- * Lightweight auth wrapper. Stores a logged-in user (email + team_id) in
- * localStorage. Designed to be drop-in upgradable to real Google OAuth:
- *   - Replace `mockGoogleLogin` with the credential exchange against your
- *     backend (POST /auth/google with the Google ID token).
- *   - The backend validates the Google ID token, looks up / creates a user,
- *     returns a session token + team_id. Store that here.
+ * Real backend auth: bcrypt-hashed passwords, JWT bearer token.
+ * The token is stored in localStorage. Every authenticated API call
+ * pulls it via `auth.token()` and sets `Authorization: Bearer <token>`.
  */
-const STORAGE_KEY = "aethena.auth.v1";
+import { API_BASE } from "./api-base";
+
+const TOKEN_KEY = "aethena.auth.token";
+const USER_KEY = "aethena.auth.user";
 
 export interface AuthUser {
+  id: string;
   email: string;
-  name?: string;
+  name?: string | null;
   team_id: string;
-  picture?: string;
-  /** Optional opaque session token for future backend use. */
-  token?: string;
+  role?: string | null;
+  research_type?: string | null;
+  institution?: string | null;
+  onboarded?: boolean;
 }
 
-function read(): AuthUser | null {
+function readToken(): string | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as AuthUser;
+    return localStorage.getItem(TOKEN_KEY);
   } catch {
     return null;
   }
 }
 
-function write(u: AuthUser | null) {
-  if (!u) localStorage.removeItem(STORAGE_KEY);
-  else localStorage.setItem(STORAGE_KEY, JSON.stringify(u));
-  // Notify listeners in this tab
+function readUser(): AuthUser | null {
+  try {
+    const raw = localStorage.getItem(USER_KEY);
+    return raw ? (JSON.parse(raw) as AuthUser) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeSession(token: string | null, user: AuthUser | null) {
+  if (!token) localStorage.removeItem(TOKEN_KEY);
+  else localStorage.setItem(TOKEN_KEY, token);
+  if (!user) localStorage.removeItem(USER_KEY);
+  else localStorage.setItem(USER_KEY, JSON.stringify(user));
   window.dispatchEvent(new CustomEvent("aethena-auth-change"));
 }
 
+async function jpost<T>(path: string, body: unknown): Promise<T> {
+  const r = await fetch(`${API_BASE}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const msg = (data?.detail as string) || r.statusText || "Request failed";
+    throw new Error(msg);
+  }
+  return data as T;
+}
+
+async function jput<T>(path: string, body: unknown, token: string): Promise<T> {
+  const r = await fetch(`${API_BASE}${path}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+  });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const msg = (data?.detail as string) || r.statusText || "Request failed";
+    throw new Error(msg);
+  }
+  return data as T;
+}
+
 export const auth = {
+  token(): string | null {
+    return readToken();
+  },
   current(): AuthUser | null {
-    return read();
+    return readUser();
   },
   isAuthed(): boolean {
-    return read() !== null;
+    return !!readToken();
   },
-  signInWithEmail(email: string, name?: string): AuthUser {
+  async register(email: string, password: string, name?: string): Promise<AuthUser> {
     const trimmed = email.trim().toLowerCase();
     if (!trimmed || !/.+@.+\..+/.test(trimmed)) {
       throw new Error("Enter a valid email address.");
     }
-    // Deterministic team_id from email — keeps self-learning per team.
-    const team_id = teamIdFromEmail(trimmed);
-    const user: AuthUser = { email: trimmed, name, team_id };
-    write(user);
-    return user;
+    if ((password || "").length < 8) {
+      throw new Error("Password must be at least 8 characters.");
+    }
+    const data = await jpost<{ token: string; user: AuthUser }>("/auth/register", {
+      email: trimmed,
+      password,
+      name: name || undefined,
+    });
+    writeSession(data.token, data.user);
+    return data.user;
+  },
+  async signIn(email: string, password: string): Promise<AuthUser> {
+    const trimmed = email.trim().toLowerCase();
+    if (!trimmed || !password) throw new Error("Enter your email and password.");
+    const data = await jpost<{ token: string; user: AuthUser }>("/auth/login", {
+      email: trimmed,
+      password,
+    });
+    writeSession(data.token, data.user);
+    return data.user;
+  },
+  async updateProfile(patch: {
+    name?: string;
+    role?: string;
+    research_type?: string;
+    institution?: string;
+  }): Promise<AuthUser> {
+    const token = readToken();
+    if (!token) throw new Error("Not signed in.");
+    const data = await jput<{ user: AuthUser }>("/auth/profile", patch, token);
+    writeSession(token, data.user);
+    return data.user;
   },
   signOut() {
-    write(null);
+    writeSession(null, null);
   },
   /** Subscribe to login/logout events. */
   onChange(cb: (u: AuthUser | null) => void): () => void {
-    const handler = () => cb(read());
+    const handler = () => cb(readUser());
     window.addEventListener("aethena-auth-change", handler);
     window.addEventListener("storage", handler);
     return () => {
@@ -65,29 +136,4 @@ export const auth = {
       window.removeEventListener("storage", handler);
     };
   },
-  /** Mock Google sign-in. Replace with real OAuth wiring when client_id is configured. */
-  async mockGoogleLogin(): Promise<AuthUser> {
-    // Pretend to do an OAuth round-trip. In a real impl, this is replaced by
-    // the @react-oauth/google credential -> backend exchange.
-    const fakeEmail = `demo-${Math.random().toString(36).slice(2, 8)}@gmail.com`;
-    const user: AuthUser = {
-      email: fakeEmail,
-      name: "Demo Scientist",
-      team_id: teamIdFromEmail(fakeEmail),
-    };
-    write(user);
-    return user;
-  },
 };
-
-function teamIdFromEmail(email: string): string {
-  // Stable hex digest -> uuid-shaped string. Matches the seeded "Husky Lab"
-  // team id when email is empty so the demo team continues to work.
-  if (!email) return "00000000-0000-0000-0000-000000000001";
-  let h = 0xcbf29ce484222325n;
-  for (let i = 0; i < email.length; i++) {
-    h = BigInt.asUintN(64, (h ^ BigInt(email.charCodeAt(i))) * 0x100000001b3n);
-  }
-  const hex = h.toString(16).padStart(16, "0");
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-0000-000000000000`;
-}

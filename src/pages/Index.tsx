@@ -18,10 +18,12 @@ const Index = () => {
   const [qcLoading, setQcLoading] = useState(false);
   const [qc, setQc] = useState<QcResult | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [regenerating, setRegenerating] = useState(false);
   const [plan, setPlan] = useState<ExperimentPlan | null>(null);
   const [planId, setPlanId] = useState<string>("");
   const [feedbackApplied, setFeedbackApplied] = useState(0);
   const [depthOpen, setDepthOpen] = useState(false);
+  const [lastDepth, setLastDepth] = useState<Depth>("regular");
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Load a saved plan if URL has ?plan=<id>, or reset to fresh form if ?new=…
@@ -95,6 +97,7 @@ const Index = () => {
   async function generatePlan(depth: Depth) {
     setDepthOpen(false);
     if (!hypothesis) return;
+    setLastDepth(depth);
     setGenerating(true);
     try {
       const payload = await api.generatePlan({ hypothesis, qc, depth, upload_summary: uploadSummary });
@@ -106,6 +109,31 @@ const Index = () => {
       toast.error("Plan generation failed", { description: e?.message ?? "Try again in a moment." });
     } finally {
       setGenerating(false);
+    }
+  }
+
+  async function regenerate() {
+    if (!hypothesis || regenerating) return;
+    setRegenerating(true);
+    try {
+      const payload = await api.generatePlan({
+        hypothesis,
+        qc,
+        depth: lastDepth,
+        upload_summary: uploadSummary,
+      });
+      setPlan(payload.plan);
+      setPlanId(payload.id);
+      setFeedbackApplied(payload.feedback_applied ?? 0);
+      toast.success(
+        payload.feedback_applied
+          ? `Regenerated with ${payload.feedback_applied} prior correction${payload.feedback_applied === 1 ? "" : "s"} applied`
+          : "Regenerated",
+      );
+    } catch (e: any) {
+      toast.error("Regeneration failed", { description: e?.message ?? "Try again in a moment." });
+    } finally {
+      setRegenerating(false);
     }
   }
 
@@ -140,7 +168,10 @@ const Index = () => {
             hypothesis={hypothesis}
             planId={planId}
             feedbackApplied={feedbackApplied}
+            references={qc?.references}
             onNew={reset}
+            onRegenerate={regenerate}
+            regenerating={regenerating}
           />
         )}
       </main>

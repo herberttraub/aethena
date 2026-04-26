@@ -266,6 +266,9 @@ def _basic_rank(ranked: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return out
 
 
+# Mock pool spans biology, physics/materials, and engineering so the
+# fallback path can still surface plausible names for non-bio hypotheses
+# (photonics, electrochemistry, etc.) instead of always returning bio PIs.
 _MOCK_POOL = [
     {
         "name": "Dr. Amelia Chen",
@@ -275,6 +278,7 @@ _MOCK_POOL = [
         "paper_count": 142,
         "top_paper_title": "Engineered cellular systems for translational therapeutics",
         "top_paper_year": 2023,
+        "tags": {"biology", "engineering", "cells"},
     },
     {
         "name": "Dr. Marcus Whitfield",
@@ -284,6 +288,7 @@ _MOCK_POOL = [
         "paper_count": 198,
         "top_paper_title": "Systems-level perturbation analysis in primary mammalian cells",
         "top_paper_year": 2024,
+        "tags": {"biology", "systems"},
     },
     {
         "name": "Dr. Priya Ramaswamy",
@@ -293,6 +298,7 @@ _MOCK_POOL = [
         "paper_count": 88,
         "top_paper_title": "Single-cell readouts of perturbation responses across donors",
         "top_paper_year": 2024,
+        "tags": {"biology", "single-cell"},
     },
     {
         "name": "Dr. Jonas Berglund",
@@ -302,6 +308,7 @@ _MOCK_POOL = [
         "paper_count": 71,
         "top_paper_title": "Quantitative assays for membrane integrity in adherent cell culture",
         "top_paper_year": 2022,
+        "tags": {"biology", "engineering"},
     },
     {
         "name": "Dr. Sofia Reyes",
@@ -311,6 +318,7 @@ _MOCK_POOL = [
         "paper_count": 117,
         "top_paper_title": "Imaging-based phenotypic screens of small-molecule libraries",
         "top_paper_year": 2023,
+        "tags": {"biology", "imaging"},
     },
     {
         "name": "Dr. Tobias Lindgren",
@@ -320,21 +328,169 @@ _MOCK_POOL = [
         "paper_count": 165,
         "top_paper_title": "Mechanistic dissection of stress-response pathways in human cells",
         "top_paper_year": 2024,
+        "tags": {"biology"},
+    },
+    {
+        "name": "Dr. Yi-Lin Park",
+        "affiliation": "MIT — Research Laboratory of Electronics",
+        "url": "https://www.rle.mit.edu/",
+        "h_index": 31,
+        "paper_count": 96,
+        "top_paper_title": "Nanophotonic light-trapping for high-efficiency thin-film photovoltaics",
+        "top_paper_year": 2023,
+        "tags": {"physics", "photonics", "photovoltaics", "materials"},
+    },
+    {
+        "name": "Dr. Daniel Fischer",
+        "affiliation": "Stanford — Geballe Laboratory for Advanced Materials",
+        "url": "https://glam.stanford.edu/",
+        "h_index": 36,
+        "paper_count": 124,
+        "top_paper_title": "Perovskite-silicon tandem cells: device-level integration strategies",
+        "top_paper_year": 2024,
+        "tags": {"physics", "materials", "photovoltaics", "perovskite"},
+    },
+    {
+        "name": "Dr. Ravi Subramanian",
+        "affiliation": "Caltech — Department of Applied Physics & Materials Science",
+        "url": "https://www.aph.caltech.edu/",
+        "h_index": 28,
+        "paper_count": 84,
+        "top_paper_title": "Plasmonic nanostructures for broadband visible absorption",
+        "top_paper_year": 2022,
+        "tags": {"physics", "photonics", "materials"},
+    },
+    {
+        "name": "Dr. Hannah Greene",
+        "affiliation": "UC Berkeley — Materials Science & Engineering",
+        "url": "https://mse.berkeley.edu/",
+        "h_index": 33,
+        "paper_count": 110,
+        "top_paper_title": "Building-integrated PV: optical-electrical co-design tradeoffs",
+        "top_paper_year": 2023,
+        "tags": {"engineering", "photovoltaics", "materials", "energy"},
+    },
+    {
+        "name": "Dr. Lucia Ferri",
+        "affiliation": "ETH Zurich — Institute for Atmosphere & Climate",
+        "url": "https://iac.ethz.ch/",
+        "h_index": 27,
+        "paper_count": 79,
+        "top_paper_title": "Climate-aware lifecycle modeling of distributed energy systems",
+        "top_paper_year": 2024,
+        "tags": {"climate", "energy", "modeling"},
+    },
+    {
+        "name": "Dr. Kenji Watanabe",
+        "affiliation": "Kyoto University — Department of Materials Science",
+        "url": "https://www.kyoto-u.ac.jp/en",
+        "h_index": 39,
+        "paper_count": 156,
+        "top_paper_title": "Defect engineering in transparent conductive oxides",
+        "top_paper_year": 2023,
+        "tags": {"physics", "materials", "thin-film"},
     },
 ]
 
 
-def _build_mock(skills: list[str]) -> list[dict[str, Any]]:
-    """When everything else fails, surface plausible academic contacts so the UI is never empty."""
-    safe = skills if skills else ["the proposed protocol"]
+_DOMAIN_KEYWORDS: dict[str, set[str]] = {
+    "physics": {"photon", "photonic", "plasmon", "nanopho", "optical", "light", "laser", "spectrum"},
+    "photovoltaics": {"photovolt", "solar", "pv", "tandem", "silicon cell", "perovskite", "transparent"},
+    "materials": {"material", "thin-film", "nanostructure", "perovskite", "alloy", "oxide", "polymer", "composite"},
+    "energy": {"energy", "battery", "fuel cell", "electrolysis", "hydrogen", "carbon capture"},
+    "biology": {"cell", "protein", "rna", "dna", "enzyme", "tissue", "organoid", "antibody", "bacteria", "neuron", "mouse", "knockout", "crispr", "vaccine"},
+    "imaging": {"imaging", "microscop", "stain", "fluoresc"},
+    "engineering": {"device", "fabricat", "integrat", "electrode", "sensor", "actuat"},
+    "climate": {"climate", "atmosphere", "emission", "warming"},
+}
+
+
+def _hypothesis_tags(hypothesis: str) -> set[str]:
+    """Heuristic domain-tag extractor: looks at the hypothesis text for keywords
+    that map to mock-pool tags. Used to bias the fallback pool toward the right
+    field instead of always defaulting to biology PIs."""
+    h = hypothesis.lower()
+    tags: set[str] = set()
+    for tag, keywords in _DOMAIN_KEYWORDS.items():
+        if any(k in h for k in keywords):
+            tags.add(tag)
+    return tags
+
+
+_BROAD_TOPIC_SYSTEM = dedent(
+    """
+    Rewrite the user's hypothesis into 2-4 broad scientific topic queries that
+    would surface relevant senior researchers on a literature database. Keep
+    each query 2-4 words, no methods names. Return strict JSON: a JSON array
+    of short topic strings.
+    """
+).strip()
+
+
+def _broad_topics(hypothesis: str) -> list[str]:
+    """Return broader topic phrases as a S2 search fallback when specific
+    skill searches return no authors. Falls back to the first noun-phrase
+    bigram if the LLM is unavailable."""
+    try:
+        out = llm.generate_structured(
+            f"Hypothesis:\n{hypothesis}",
+            response_schema=SKILL_SCHEMA,
+            system=_BROAD_TOPIC_SYSTEM,
+            model=settings.GEMINI_MODEL_FLASH,
+        )
+    except Exception:
+        return _keyword_fallback(hypothesis)[:3]
+    if isinstance(out, list):
+        return [str(s).strip() for s in out if str(s).strip()][:4]
+    return _keyword_fallback(hypothesis)[:3]
+
+
+def _build_mock(
+    skills: list[str],
+    hypothesis: str = "",
+    institution: str | None = None,
+) -> list[dict[str, Any]]:
+    """When live search returns no authors, surface plausible academic
+    contacts so the UI is never empty. Bias the pool by domain tags inferred
+    from the hypothesis text AND by the user's institution if provided
+    (regional clustering — MIT users see Boston-area PIs first, etc.).
+    Strips the internal `tags` field before returning."""
+    safe = skills if skills else ["the proposed methodology"]
+    tags = _hypothesis_tags(hypothesis)
+    inst = (institution or "").lower()
+
+    def affil_match(p: dict[str, Any]) -> int:
+        affil = (p.get("affiliation") or "").lower()
+        if not inst or not affil:
+            return 0
+        # Direct mention wins; otherwise check shared region keywords.
+        if inst in affil or affil.split(" — ")[0].split(",")[0].lower() in inst:
+            return 2
+        boston = {"mit", "harvard", "broad", "northeastern", "boston university", "whitehead", "mass general"}
+        west_coast = {"stanford", "berkeley", "caltech", "ucla", "ucsf"}
+        if any(k in inst for k in boston) and any(k in affil for k in boston):
+            return 1
+        if any(k in inst for k in west_coast) and any(k in affil for k in west_coast):
+            return 1
+        return 0
+
+    scored = sorted(
+        _MOCK_POOL,
+        key=lambda p: (-len(tags & (p.get("tags") or set())), -affil_match(p)),
+    )
     out: list[dict[str, Any]] = []
-    for i, base in enumerate(_MOCK_POOL):
+    for i, base in enumerate(scored[:8]):
         start = i % max(1, len(safe))
         matched = safe[start : start + 2] or safe[:2]
+        clean = {k: v for k, v in base.items() if k != "tags"}
         out.append(
             {
-                **base,
-                "relevance": f"Has hands-on experience with {' and '.join(matched) or 'techniques relevant to this hypothesis'}, and has published closely related methodology.",
+                **clean,
+                "relevance": (
+                    f"Suggested based on overlap with {', '.join(matched)}. "
+                    "(Generic suggestion — Semantic Scholar returned no exact matches "
+                    "for this hypothesis. Consider broadening your skill terms.)"
+                ),
                 "matched_skills": matched or ["relevant methodology"],
                 "email": None,
             }
@@ -342,11 +498,38 @@ def _build_mock(skills: list[str]) -> list[dict[str, Any]]:
     return out
 
 
-def find_collaborators(hypothesis: str, plan: dict[str, Any] | None) -> dict[str, Any]:
-    """Top-level entry point. Returns {collaborators: [...], skills: [...]}."""
+def find_collaborators(
+    hypothesis: str,
+    plan: dict[str, Any] | None,
+    *,
+    institution: str | None = None,
+) -> dict[str, Any]:
+    """Top-level entry point. Returns {collaborators: [...], skills: [...]}.
+
+    Strategy:
+      1. Extract specific skills from the hypothesis + plan, search S2 per skill.
+      2. If the merged result is sparse, expand with broader topic queries so
+         niche / non-bio hypotheses still surface real researchers.
+      3. Fall back to a domain-tagged mock pool only as a last resort, with
+         the relevance text honestly flagging it as a generic suggestion.
+    """
     skills = _extract_skills(hypothesis, plan)
     per_skill = _search_authors_parallel(skills)
     merged = _merge_authors(per_skill)
+
+    if len(merged) < 6:
+        # Specific terms didn't surface enough authors — broaden the search.
+        broader = _broad_topics(hypothesis)
+        if broader:
+            extra = _search_authors_parallel(broader)
+            extra_merged = _merge_authors(extra)
+            seen = {a.get("authorId") or a.get("name") for a in merged}
+            for a in extra_merged:
+                key = a.get("authorId") or a.get("name")
+                if key and key not in seen:
+                    merged.append(a)
+                    seen.add(key)
+
     ranked = sorted(
         merged,
         key=lambda a: (
@@ -355,7 +538,7 @@ def find_collaborators(hypothesis: str, plan: dict[str, Any] | None) -> dict[str
         ),
     )[:14]
 
-    collaborators = _rank_with_llm(hypothesis, ranked)
+    collaborators = _rank_with_llm(hypothesis, ranked) if ranked else []
     if not collaborators:
-        collaborators = _build_mock(skills)
+        collaborators = _build_mock(skills, hypothesis, institution=institution)
     return {"collaborators": collaborators, "skills": skills}

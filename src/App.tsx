@@ -8,6 +8,8 @@ import Reviews from "./pages/Reviews.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Landing from "./pages/Landing.tsx";
 import AuthScreen from "./pages/Login.tsx";
+import Onboarding from "./pages/Onboarding.tsx";
+import Profile from "./pages/Profile.tsx";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +23,8 @@ const App = () => (
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<AuthScreen mode="login" />} />
           <Route path="/register" element={<AuthScreen mode="register" />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/app" element={<Index />} />
           <Route path="/reviews" element={<Reviews />} />
           {/* Legacy aliases — keep deep-links working */}

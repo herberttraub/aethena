@@ -21,3 +21,5 @@ svglib<1.6
 pypandoc>=1.14
 pyyaml>=6
 tenacity>=9
+bcrypt>=4.2
+pyjwt>=2.10

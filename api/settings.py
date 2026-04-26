@@ -34,6 +34,11 @@ class Settings(BaseSettings):
 
     SEMANTIC_SCHOLAR_KEY: str = ""
 
+    # Auth — JWT signing key. Generate one with `openssl rand -hex 32` and set
+    # in env. The hardcoded fallback is only acceptable for local development.
+    JWT_SECRET: str = "dev-only-not-for-production-change-me"
+    JWT_TTL_DAYS: int = 30
+
     @property
     def embedding_dim(self) -> int:
         return self.GEMINI_EMBEDDING_DIM if self.LLM_PROVIDER == "gemini" else self.OPENAI_EMBEDDING_DIM

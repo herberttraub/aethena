@@ -25,22 +25,62 @@ function mapsEmbedHref(location: string) {
   return `https://maps.google.com/maps?q=${encodeURIComponent(`${location}, Cambridge, MA`)}&z=15&output=embed`;
 }
 
-interface Group {
-  location: string;
+interface BuildingGroup {
+  /** Display name for the building (e.g. "Building 32" or "Stata Center"). */
+  building: string;
+  /** Rooms within this building, each with the equipment that lives there. */
+  rooms: { room: string; items: EquipmentItem[] }[];
   owners: string[];
-  items: EquipmentItem[];
 }
 
-function groupByLocation(items: EquipmentItem[]): Group[] {
-  const map = new Map<string, Group>();
+/** Extract a building label and a room label from a free-form location string.
+ * Examples:
+ *   "Building 32, Room 415"   → ("Building 32", "Room 415")
+ *   "Bldg 76 Rm 220"           → ("Building 76", "Room 220")
+ *   "32-415"                   → ("Building 32", "Room 415")
+ *   "Stata Center, Room 4-200" → ("Stata Center", "Room 4-200")
+ *   "MIT Koch Institute"       → ("MIT Koch Institute", "")
+ */
+function splitBuildingRoom(loc: string): { building: string; room: string } {
+  const raw = (loc || "").trim();
+  if (!raw) return { building: "Location not specified", room: "" };
+  // "32-415" style → infer building 32, room 415
+  const dashMatch = raw.match(/^([A-Za-z]?\d{1,3})-([A-Za-z]?\d{2,4})\b/);
+  if (dashMatch) return { building: `Building ${dashMatch[1]}`, room: `Room ${dashMatch[2]}` };
+  // "Building X, Room Y" / "Bldg X Rm Y"
+  const bldgMatch = raw.match(/\b(?:building|bldg|bld)\.?\s*([A-Za-z0-9-]+)\b/i);
+  const roomMatch = raw.match(/\b(?:room|rm)\.?\s*([A-Za-z0-9-]+)\b/i);
+  if (bldgMatch) {
+    return {
+      building: `Building ${bldgMatch[1].toUpperCase()}`,
+      room: roomMatch ? `Room ${roomMatch[1]}` : "",
+    };
+  }
+  // Comma-separated: building before the first comma, room after.
+  const commaIdx = raw.indexOf(",");
+  if (commaIdx > 0) {
+    return { building: raw.slice(0, commaIdx).trim(), room: raw.slice(commaIdx + 1).trim() };
+  }
+  // Otherwise treat the whole thing as a building name.
+  return { building: raw, room: "" };
+}
+
+function groupByBuilding(items: EquipmentItem[]): BuildingGroup[] {
+  const map = new Map<string, BuildingGroup>();
   for (const it of items) {
-    const key = (it.location || "").trim() || "Location not specified";
-    let g = map.get(key);
+    const { building, room } = splitBuildingRoom(it.location || "");
+    let g = map.get(building);
     if (!g) {
-      g = { location: key, owners: [], items: [] };
-      map.set(key, g);
+      g = { building, rooms: [], owners: [] };
+      map.set(building, g);
     }
-    g.items.push(it);
+    const roomKey = room || "Unspecified room";
+    let r = g.rooms.find((x) => x.room === roomKey);
+    if (!r) {
+      r = { room: roomKey, items: [] };
+      g.rooms.push(r);
+    }
+    r.items.push(it);
     if (it.owner_team && !g.owners.includes(it.owner_team)) {
       g.owners.push(it.owner_team);
     }
@@ -50,8 +90,8 @@ function groupByLocation(items: EquipmentItem[]): Group[] {
 
 export function EquipmentPanel({ plan }: Props) {
   const equipmentList = plan.equipment_list ?? [];
-  const groups = useMemo(() => groupByLocation(equipmentList), [equipmentList]);
-  const hasRichData = groups.length > 0 && groups.some((g) => g.location && g.location !== "Location not specified");
+  const groups = useMemo(() => groupByBuilding(equipmentList), [equipmentList]);
+  const hasRichData = groups.length > 0 && groups.some((g) => g.building && g.building !== "Location not specified");
 
   // Fallback path: if we don't have plan.equipment_list, fall back to /equipment-sourcing
   const [sourcing, setSourcing] = useState<EquipmentSourcing[]>([]);
@@ -108,45 +148,59 @@ export function EquipmentPanel({ plan }: Props) {
 
       {hasRichData ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {groups.map((g, i) => (
-            <article key={i} className="lab-card p-4 flex flex-col gap-3">
-              <div>
-                <a
-                  href={mapsLinkHref(g.location)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-serif text-lg text-foreground hover:underline inline-flex items-center gap-1"
-                >
-                  <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
-                  {g.location}
-                </a>
-                {g.owners.length > 0 && (
+          {groups.map((g, i) => {
+            const totalItems = g.rooms.reduce((acc, r) => acc + r.items.length, 0);
+            return (
+              <article key={i} className="lab-card p-4 flex flex-col gap-3">
+                <div>
+                  <a
+                    href={mapsLinkHref(g.building)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-serif text-lg text-foreground hover:underline inline-flex items-center gap-1"
+                  >
+                    <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
+                    {g.building}
+                  </a>
                   <p className="text-[11px] text-muted-foreground mt-0.5">
-                    owner{g.owners.length === 1 ? "" : "s"}: {g.owners.join(", ")}
+                    {totalItems} item{totalItems === 1 ? "" : "s"}
+                    {g.rooms.length > 1 ? ` across ${g.rooms.length} rooms` : ""}
+                    {g.owners.length > 0 ? ` · owner${g.owners.length === 1 ? "" : "s"}: ${g.owners.join(", ")}` : ""}
                   </p>
-                )}
-              </div>
-              <ul className="space-y-1.5">
-                {g.items.map((it, j) => {
-                  const slug = it.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-                  return (
-                    <li key={j} id={`equipment-${slug}`} className="text-sm scroll-mt-28">
-                      <span className="font-medium text-foreground">{it.name}</span>
-                      {it.model && (
-                        <span className="font-mono text-[11px] text-muted-foreground ml-2">{it.model}</span>
+                </div>
+                <div className="space-y-2.5">
+                  {g.rooms.map((r, ri) => (
+                    <div key={ri}>
+                      {r.room && r.room !== "Unspecified room" && (
+                        <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground mb-1">
+                          {r.room}
+                        </p>
                       )}
-                    </li>
-                  );
-                })}
-              </ul>
-              <iframe
-                src={mapsEmbedHref(g.location)}
-                loading="lazy"
-                className="w-full h-32 rounded-md border border-border"
-                title={`Map for ${g.location}`}
-              />
-            </article>
-          ))}
+                      <ul className="space-y-1">
+                        {r.items.map((it, j) => {
+                          const slug = it.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+                          return (
+                            <li key={j} id={`equipment-${slug}`} className="text-sm scroll-mt-28">
+                              <span className="font-medium text-foreground">{it.name}</span>
+                              {it.model && (
+                                <span className="font-mono text-[11px] text-muted-foreground ml-2">{it.model}</span>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+                <iframe
+                  src={mapsEmbedHref(g.building)}
+                  loading="lazy"
+                  className="w-full h-32 rounded-md border border-border"
+                  title={`Map for ${g.building}`}
+                />
+              </article>
+            );
+          })}
         </div>
       ) : sourcingLoading ? (
         <div className="lab-card p-8 text-center">

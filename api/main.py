@@ -28,6 +28,8 @@ from .rag.pdf_extract import extract_pdf_text
 from .schemas.plan import PlanRequest
 from .schemas.qc import QCRequest, QCResult
 from .settings import settings
+from . import auth as auth_module
+from fastapi import Depends
 
 
 def _conn():
@@ -53,6 +55,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+def _on_startup() -> None:
+    """Idempotent migrations: users table, feedback.domain column."""
+    auth_module.ensure_users_table()
 
 
 @app.exception_handler(Exception)
@@ -370,10 +378,14 @@ class CollaboratorsIn(BaseModel):
 
 
 @app.post("/collaborators")
-def collaborators(body: CollaboratorsIn) -> dict:
+def collaborators(
+    body: CollaboratorsIn,
+    user: dict | None = Depends(auth_module.get_current_user_optional),
+) -> dict:
     if not body.hypothesis or not body.hypothesis.strip():
         raise HTTPException(status_code=400, detail="hypothesis is required")
-    return collaborators_agent.find_collaborators(body.hypothesis, body.plan)
+    institution = (user or {}).get("institution") or None
+    return collaborators_agent.find_collaborators(body.hypothesis, body.plan, institution=institution)
 
 
 # ─── Equipment sourcing (Lovable port) ─────────────────────────────────────
@@ -408,3 +420,102 @@ async def parse_uploads(files: list[UploadFile] = File(default=[])) -> dict:
         raw = await f.read()
         items.append((f.filename or "upload", f.content_type or "", raw))
     return {"summary": parse_uploads_agent.parse_files(items)}
+
+
+# ─── Auth ──────────────────────────────────────────────────────────────────
+class RegisterIn(BaseModel):
+    email: str
+    password: str
+    name: str | None = None
+
+
+class LoginIn(BaseModel):
+    email: str
+    password: str
+
+
+class ProfileIn(BaseModel):
+    name: str | None = None
+    role: str | None = None
+    research_type: str | None = None
+    institution: str | None = None
+
+
+@app.post("/auth/register")
+def auth_register(body: RegisterIn) -> dict:
+    user = auth_module.create_user(email=body.email, password=body.password, name=body.name)
+    token = auth_module.issue_token(user_id=user["id"], team_id=user["team_id"], email=user["email"])
+    return {"token": token, "user": auth_module.public_user(user)}
+
+
+@app.post("/auth/login")
+def auth_login(body: LoginIn) -> dict:
+    user = auth_module.find_user_by_email(body.email)
+    if not user or not auth_module.verify_password(body.password, user["password_hash"]):
+        raise HTTPException(status_code=401, detail="Email or password is incorrect.")
+    token = auth_module.issue_token(user_id=user["id"], team_id=user["team_id"], email=user["email"])
+    return {"token": token, "user": auth_module.public_user(user)}
+
+
+@app.get("/auth/me")
+def auth_me(user: dict = Depends(auth_module.get_current_user)) -> dict:
+    return {"user": auth_module.public_user(user)}
+
+
+@app.put("/auth/profile")
+def auth_profile(body: ProfileIn, user: dict = Depends(auth_module.get_current_user)) -> dict:
+    updated = auth_module.update_profile(
+        user_id=user["id"],
+        name=body.name,
+        role=body.role,
+        research_type=body.research_type,
+        institution=body.institution,
+    )
+    return {"user": auth_module.public_user(updated)}
+
+
+# ─── Preferences (what the model has learned) ──────────────────────────────
+@app.get("/me/preferences")
+def list_preferences(user: dict = Depends(auth_module.get_current_user)) -> dict:
+    """List the team's accepted feedback rows so the user can review what
+    has been folded into future plan generations."""
+    rows: list[dict] = []
+    with _conn() as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            select id, section, before, after, freeform_note, experiment_type,
+                   domain, created_at
+              from feedback
+             where team_id = %s and accepted = true
+             order by created_at desc
+             limit 200
+            """,
+            (user["team_id"],),
+        )
+        for fid, section, before, after, note, exp_type, domain, created_at in cur.fetchall():
+            rows.append({
+                "id": str(fid),
+                "section": section,
+                "before": before,
+                "after": after,
+                "freeform_note": note,
+                "experiment_type": exp_type,
+                "domain": domain,
+                "created_at": created_at.isoformat() if created_at else "",
+            })
+    return {"items": rows}
+
+
+@app.delete("/me/preferences/{pref_id}")
+def delete_preference(pref_id: str, user: dict = Depends(auth_module.get_current_user)) -> dict:
+    """Soft-delete: flip accepted=false so few-shot retrieval skips this row.
+    Preserves history and is reversible if the user changes their mind."""
+    with _conn() as conn, conn.cursor() as cur:
+        cur.execute(
+            "update feedback set accepted = false where id = %s and team_id = %s",
+            (pref_id, user["team_id"]),
+        )
+        if cur.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Preference not found.")
+        conn.commit()
+    return {"ok": True, "id": pref_id}
